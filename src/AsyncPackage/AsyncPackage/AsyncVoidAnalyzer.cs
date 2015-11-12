@@ -1,10 +1,5 @@
-﻿// Copyright (c) Microsoft.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
-
-using System;
-using System.Collections.Immutable;
-using System.Threading;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.Diagnostics;
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 namespace AsyncPackage
 {
@@ -16,7 +11,7 @@ namespace AsyncPackage
     {
         internal const string AsyncVoidId = "Async001";
 
-        internal static DiagnosticDescriptor VoidReturnType = new DiagnosticDescriptor(id: AsyncVoidId,
+        internal static readonly DiagnosticDescriptor VoidReturnType = new DiagnosticDescriptor(id: AsyncVoidId,
             title: "Avoid Async Void",
             messageFormat: "This method has the async keyword but it returns void",
             category: "Usage",
@@ -34,15 +29,14 @@ namespace AsyncPackage
         {
             // Filter out methods that do not use Async and that do not have exactly two parameters
             var methodSymbol = (IMethodSymbol)context.Symbol;
-
-            var eventType = context.Compilation.GetTypeByMetadataName("System.EventArgs");
+            object eventType = context.Compilation.GetTypeByMetadataName("System.EventArgs");
 
             if (methodSymbol.ReturnsVoid && methodSymbol.IsAsync)
             {
                 if (methodSymbol.Parameters.Length == 2)
                 {
-                    var firstParam = methodSymbol.Parameters[0];
-                    var secondParam = methodSymbol.Parameters[1];
+                    object firstParam = methodSymbol.Parameters[0];
+                    object secondParam = methodSymbol.Parameters[1];
 
                     if (firstParam is object)
                     {
@@ -53,8 +47,7 @@ namespace AsyncPackage
                         }
                         else
                         {
-                            // Check if the second parameter implements EventArgs. If it does; return.
-                            var checkForEventType = secondParam.Type.BaseType;
+                            object checkForEventType = secondParam.Type.BaseType;
                             while (checkForEventType.OriginalDefinition != context.Compilation.GetTypeByMetadataName("System.Object"))
                             {
                                 if (checkForEventType == eventType)

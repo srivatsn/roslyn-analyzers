@@ -1,4 +1,5 @@
-﻿// Copyright (c) Microsoft.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Test.Utilities;
@@ -7,7 +8,7 @@ using Roslyn.Test.Utilities;
 using Xunit;
 
 namespace System.Runtime.Analyzers.UnitTests
-{                                    
+{
     public class UseOrdinalStringComparisonTests : DiagnosticAnalyzerTestBase
     {
         #region Helper methods

@@ -1,4 +1,5 @@
-﻿// Copyright (c) Microsoft.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System.Collections.Generic;
 using System.Linq;
@@ -11,12 +12,12 @@ namespace Desktop.Analyzers.Common
 {
     public sealed class CSharpSyntaxNodeHelper : SyntaxNodeHelper
     {
-        private static CSharpSyntaxNodeHelper instance = new CSharpSyntaxNodeHelper();
+        private static CSharpSyntaxNodeHelper s_instance = new CSharpSyntaxNodeHelper();
 
-        public static CSharpSyntaxNodeHelper Default { get { return instance; } }
+        public static CSharpSyntaxNodeHelper Default { get { return s_instance; } }
 
         private CSharpSyntaxNodeHelper()
-        {}
+        { }
 
         public override ITypeSymbol GetClassDeclarationTypeSymbol(SyntaxNode node, SemanticModel semanticModel)
         {
@@ -214,7 +215,7 @@ namespace Desktop.Analyzers.Common
         }
 
         public override bool IsMethodInvocationNode(SyntaxNode node)
-        { 
+        {
             if (node == null)
             {
                 return false;

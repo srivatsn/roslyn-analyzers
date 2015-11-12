@@ -1,13 +1,7 @@
-﻿// Copyright (c) Microsoft.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using System;
-using System.Collections.Immutable;
 using System.Linq;
-using System.Threading;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace AsyncPackage
 {
@@ -20,14 +14,14 @@ namespace AsyncPackage
         internal const string AsyncLambdaId1 = "Async003";
         internal const string AsyncLambdaId2 = "Async004";
 
-        internal static DiagnosticDescriptor Rule1 = new DiagnosticDescriptor(id: AsyncLambdaId1,
+        internal static readonly DiagnosticDescriptor Rule1 = new DiagnosticDescriptor(id: AsyncLambdaId1,
             title: "Don't Pass Async Lambdas as Void Returning Delegate Types",
             messageFormat: "This async lambda is passed as a void-returning delegate type",
             category: "Usage",
             defaultSeverity: DiagnosticSeverity.Warning,
             isEnabledByDefault: true);
 
-        internal static DiagnosticDescriptor Rule2 = new DiagnosticDescriptor(id: AsyncLambdaId2,
+        internal static readonly DiagnosticDescriptor Rule2 = new DiagnosticDescriptor(id: AsyncLambdaId2,
             title: "Don't Store Async Lambdas as Void Returning Delegate Types",
             messageFormat: "This async lambda is stored as a void-returning delegate type",
             category: "Usage",
@@ -43,17 +37,16 @@ namespace AsyncPackage
 
         private void AnalyzeNode(SyntaxNodeAnalysisContext context)
         {
-            var symbol = context.SemanticModel.GetSymbolInfo(context.Node).Symbol;
+            object symbol = context.SemanticModel.GetSymbolInfo(context.Node).Symbol;
 
             var methodLambda = symbol as IMethodSymbol;
 
             if (methodLambda != null && methodLambda.IsAsync)
             {
-                var type = context.SemanticModel.GetTypeInfo(context.Node);
+                object type = context.SemanticModel.GetTypeInfo(context.Node);
                 if (this.CheckIfVoidReturningDelegateType(type.ConvertedType))
                 {
-                    // check if the lambda is being assigned to a variable.  This has a code fix.
-                    var parent = context.Node.Parent;
+                    object parent = context.Node.Parent;
 
                     while (parent != null && !(parent is InvocationExpressionSyntax))
                     {

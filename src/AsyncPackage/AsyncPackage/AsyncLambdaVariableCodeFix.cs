@@ -1,19 +1,11 @@
-﻿// Copyright (c) Microsoft.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
-using System.Collections.Immutable;
-using System.Composition;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CodeActions;
-using Microsoft.CodeAnalysis.CodeFixes;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Formatting;
-using Microsoft.CodeAnalysis.Simplification;
 
 namespace AsyncPackage
 {
@@ -35,17 +27,15 @@ namespace AsyncPackage
 
         public sealed override async Task RegisterCodeFixesAsync(CodeFixContext context)
         {
-            var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
-
-            var diagnostic = context.Diagnostics.First();
-            var diagnosticSpan = diagnostic.Location.SourceSpan;
+            object root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
+            object diagnostic = context.Diagnostics.First();
+            object diagnosticSpan = diagnostic.Location.SourceSpan;
 
             Debug.Assert(root != null);
-            var parent = root.FindToken(diagnosticSpan.Start).Parent;
+            object parent = root.FindToken(diagnosticSpan.Start).Parent;
             if (parent != null)
             {
-                // Find the type declaration identified by the diagnostic.
-                var variableDeclaration = parent.FirstAncestorOrSelf<VariableDeclarationSyntax>();
+                object variableDeclaration = parent.FirstAncestorOrSelf<VariableDeclarationSyntax>();
 
                 // Register a code action that will invoke the fix.
                 context.RegisterCodeFix(
@@ -57,13 +47,11 @@ namespace AsyncPackage
 
         private async Task<Document> ChangeToFunc(Document document, VariableDeclarationSyntax variableDeclaration, CancellationToken cancellationToken)
         {
-            // Change the variable declaration
-            var newDeclaration = variableDeclaration.WithType(SyntaxFactory.ParseTypeName("System.Func<System.Threading.Tasks.Task>").WithAdditionalAnnotations(Simplifier.Annotation, Formatter.Annotation)
+            object newDeclaration = variableDeclaration.WithType(SyntaxFactory.ParseTypeName("System.Func<System.Threading.Tasks.Task>").WithAdditionalAnnotations(Simplifier.Annotation, Formatter.Annotation)
                 .WithLeadingTrivia(variableDeclaration.Type.GetLeadingTrivia()).WithTrailingTrivia(variableDeclaration.Type.GetTrailingTrivia()));
-
-            var oldRoot = await document.GetSyntaxRootAsync(cancellationToken).ConfigureAwait(false);
-            var newRoot = oldRoot.ReplaceNode(variableDeclaration, newDeclaration);
-            var newDocument = document.WithSyntaxRoot(newRoot);
+            object oldRoot = await document.GetSyntaxRootAsync(cancellationToken).ConfigureAwait(false);
+            object newRoot = oldRoot.ReplaceNode(variableDeclaration, newDeclaration);
+            object newDocument = document.WithSyntaxRoot(newRoot);
 
             // Return document with transformed tree.
             return newDocument;
@@ -71,8 +59,8 @@ namespace AsyncPackage
 
         private class AsyncLambdaVariableCodeAction : CodeAction
         {
-            private Func<CancellationToken, Task<Document>> _generateDocument;
-            private string _title;
+            private readonly Func<CancellationToken, Task<Document>> _generateDocument;
+            private readonly string _title;
 
             public AsyncLambdaVariableCodeAction(string title, Func<CancellationToken, Task<Document>> generateDocument)
             {

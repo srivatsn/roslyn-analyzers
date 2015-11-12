@@ -1,4 +1,5 @@
-﻿' Copyright (c) Microsoft.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
+﻿' Copyright (c) Microsoft. All rights reserved.
+' Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 Imports System.Linq
 Imports Microsoft.CodeAnalysis
@@ -10,7 +11,7 @@ Namespace System.Security.Cryptography.Hashing.Algorithms.Analyzers.Common
     Public NotInheritable Class BasicSyntaxNodeHelper
         Inherits SyntaxNodeHelper
 
-        Shared s_defaultInstance As BasicSyntaxNodeHelper = New BasicSyntaxNodeHelper()
+        Private Shared s_defaultInstance As BasicSyntaxNodeHelper = New BasicSyntaxNodeHelper()
 
         Public Shared ReadOnly Property DefaultInstance As BasicSyntaxNodeHelper
             Get

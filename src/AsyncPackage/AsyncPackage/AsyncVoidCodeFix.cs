@@ -1,17 +1,10 @@
-﻿// Copyright (c) Microsoft.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
-using System.Collections.Immutable;
-using System.Composition;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CodeActions;
-using Microsoft.CodeAnalysis.CodeFixes;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Simplification;
 
 namespace AsyncPackage
 {
@@ -33,13 +26,10 @@ namespace AsyncPackage
 
         public sealed override async Task RegisterCodeFixesAsync(CodeFixContext context)
         {
-            var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
-
-            var diagnostic = context.Diagnostics.First();
-            var diagnosticSpan = diagnostic.Location.SourceSpan;
-
-            // Find the type declaration identified by the diagnostic.
-            var methodDeclaration = root.FindToken(diagnosticSpan.Start).Parent.FirstAncestorOrSelf<MethodDeclarationSyntax>();
+            object root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
+            object diagnostic = context.Diagnostics.First();
+            object diagnosticSpan = diagnostic.Location.SourceSpan;
+            object methodDeclaration = root.FindToken(diagnosticSpan.Start).Parent.FirstAncestorOrSelf<MethodDeclarationSyntax>();
 
             // Register a code action that will invoke the fix.
             context.RegisterCodeFix(
@@ -50,14 +40,11 @@ namespace AsyncPackage
 
         private async Task<Document> VoidToTaskAsync(Document document, MethodDeclarationSyntax methodDeclaration, CancellationToken cancellationToken)
         {
-            // The Task object must be parsed from a string using the Syntax Factory
-            var newType = SyntaxFactory.ParseTypeName("System.Threading.Tasks.Task").WithAdditionalAnnotations(Simplifier.Annotation).WithTrailingTrivia(methodDeclaration.ReturnType.GetTrailingTrivia());
-
-            var newMethodDeclaration = methodDeclaration.WithReturnType(newType);
-
-            var oldRoot = await document.GetSyntaxRootAsync(cancellationToken).ConfigureAwait(false);
-            var newRoot = oldRoot.ReplaceNode(methodDeclaration, newMethodDeclaration);
-            var newDocument = document.WithSyntaxRoot(newRoot);
+            object newType = SyntaxFactory.ParseTypeName("System.Threading.Tasks.Task").WithAdditionalAnnotations(Simplifier.Annotation).WithTrailingTrivia(methodDeclaration.ReturnType.GetTrailingTrivia());
+            object newMethodDeclaration = methodDeclaration.WithReturnType(newType);
+            object oldRoot = await document.GetSyntaxRootAsync(cancellationToken).ConfigureAwait(false);
+            object newRoot = oldRoot.ReplaceNode(methodDeclaration, newMethodDeclaration);
+            object newDocument = document.WithSyntaxRoot(newRoot);
 
             // Return document with transformed tree.
             return newDocument;
@@ -65,8 +52,8 @@ namespace AsyncPackage
 
         private class AsyncVoidCodeAction : CodeAction
         {
-            private Func<CancellationToken, Task<Document>> _createDocument;
-            private string _title;
+            private readonly Func<CancellationToken, Task<Document>> _createDocument;
+            private readonly string _title;
 
             public AsyncVoidCodeAction(string title, Func<CancellationToken, Task<Document>> createDocument)
             {

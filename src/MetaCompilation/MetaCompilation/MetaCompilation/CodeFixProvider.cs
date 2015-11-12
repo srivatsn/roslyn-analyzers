@@ -1,4 +1,6 @@
-﻿// Copyright (c) Microsoft.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
@@ -585,7 +587,7 @@ namespace MetaCompilation
         // replace the category string
         private async Task<Document> ReplaceCategory(Document document, LiteralExpressionSyntax declaration, CancellationToken c)
         {
-            SyntaxGenerator generator = SyntaxGenerator.GetGenerator(document); 
+            SyntaxGenerator generator = SyntaxGenerator.GetGenerator(document);
             SyntaxNode newString = generator.LiteralExpression("Formatting");
             return await ReplaceNode(declaration, newString, document);
         }
@@ -1467,7 +1469,7 @@ namespace MetaCompilation
 
                     for (int i = 0; i < ruleArgumentList.Arguments.Count; i++)
                     {
-                       ArgumentSyntax currentArg = ruleArgumentList.Arguments[i];
+                        ArgumentSyntax currentArg = ruleArgumentList.Arguments[i];
                         string currentArgName = currentArg.NameColon.Name.Identifier.Text;
                         if (currentArgName == "id")
                         {
@@ -1579,7 +1581,7 @@ namespace MetaCompilation
 
             SyntaxNode newPropertyDecl = generator.PropertyDeclaration("SupportedDiagnostics", type, accessibility: Accessibility.Public, modifiers: DeclarationModifiers.Override, getAccessorStatements: getAccessorStatements).WithLeadingTrivia(declaration.GetLeadingTrivia()).WithTrailingTrivia(declaration.GetTrailingTrivia());
             newPropertyDecl = newPropertyDecl.RemoveNode((newPropertyDecl as PropertyDeclarationSyntax).AccessorList.Accessors[1], 0);
-            
+
             return await ReplaceNode(declaration, newPropertyDecl, document);
         }
 
@@ -1628,7 +1630,7 @@ namespace MetaCompilation
             {
                 accessorToKeep = SyntaxFactory.AccessorDeclaration(SyntaxKind.GetAccessorDeclaration, block);
             }
-            
+
             SyntaxList<SyntaxNode> accessorsToAdd = new SyntaxList<SyntaxNode>();
             accessorsToAdd = accessorsToAdd.Add(accessorToKeep);
             PropertyDeclarationSyntax newPropertyDeclaration = declaration.WithAccessorList(null);
@@ -1737,7 +1739,7 @@ namespace MetaCompilation
                 }
             }
 
-           return document;
+            return document;
         }
 
         // adds a SupportedDiagnostics property to the class
@@ -1786,7 +1788,7 @@ namespace MetaCompilation
         }
         #endregion
 
-        class CodeFixHelper
+        private class CodeFixHelper
         {
             // removes the provided statement from the method that it is in
             protected internal static SyntaxNode RemoveStatement(StatementSyntax statement)
@@ -1795,7 +1797,7 @@ namespace MetaCompilation
                 MethodDeclarationSyntax newInitializeDeclaration = initializeDeclaration.RemoveNode(statement, 0);
                 return newInitializeDeclaration as SyntaxNode;
             }
-            
+
             // checks if the statement is a correct regsiter statement
             protected internal static bool IsCorrectRegister(ExpressionStatementSyntax statement)
             {
@@ -1836,20 +1838,19 @@ namespace MetaCompilation
 
                 return true;
             }
-            
+
             // gets the name of the span variable
             protected internal static string GetSpanName(MethodDeclarationSyntax methodDecl)
             {
                 string spanName = (methodDecl.Body.Statements[6] as LocalDeclarationStatementSyntax).Declaration.Variables[0].Identifier.Text;
                 return spanName;
             }
-            
+
             // gets the name of the start span variable
             protected internal static string GetStartSpanName(MethodDeclarationSyntax methodDecl)
             {
                 string startIdentifier = (methodDecl.Body.Statements[4] as LocalDeclarationStatementSyntax).Declaration.Variables[0].Identifier.Text;
                 return startIdentifier;
-                
             }
 
             // gets the name of the end span variable
@@ -1865,7 +1866,7 @@ namespace MetaCompilation
                 string openParenName = (methodDecl.Body.Statements[3] as LocalDeclarationStatementSyntax).Declaration.Variables[0].Identifier.Text;
                 return openParenName;
             }
-            
+
             // gets the name of the location variable
             protected internal static string GetLocationName(MethodDeclarationSyntax methodDecl)
             {
@@ -1888,14 +1889,14 @@ namespace MetaCompilation
                 string diagnosticName = (methodDecl.Body.Statements[8] as LocalDeclarationStatementSyntax).Declaration.Variables[0].Identifier.Text;
                 return diagnosticName;
             }
-            
+
             // gets the context parameter of the analysis method
             protected internal static string GetContextParameter(MethodDeclarationSyntax methodDecl)
             {
                 string contextName = methodDecl.ParameterList.Parameters[0].Identifier.Text;
                 return contextName;
             }
-            
+
             // builds a register statement
             protected internal static SyntaxNode BuildRegister(SyntaxGenerator generator, string context, string register, ArgumentListSyntax argumentList)
             {
@@ -1930,7 +1931,7 @@ namespace MetaCompilation
 
                 return methodName;
             }
-            
+
             // gets the name of the analysis method
             protected internal static string AnalysisMethodName(MethodDeclarationSyntax methodDeclaration)
             {
@@ -1940,14 +1941,14 @@ namespace MetaCompilation
                 string methodName = methodIdentifier.Identifier.Text;
                 return methodName;
             }
-            
+
             // set method accessibility to accessibility
             protected internal static SyntaxNode MethodAccessibility(SyntaxGenerator generator, MethodDeclarationSyntax methodDeclaration, Accessibility accessibility)
             {
                 SyntaxNode newMethod = generator.WithAccessibility(methodDeclaration, accessibility);
                 return newMethod;
             }
-            
+
             // set method return type to returnType
             protected internal static SyntaxNode MethodReturnType(MethodDeclarationSyntax methodDeclaration, string returnType)
             {
@@ -1987,7 +1988,7 @@ namespace MetaCompilation
                 string name = firstParameter.Identifier.Text;
                 return name;
             }
-            
+
             // creates an if-statement checking the count of trailing trivia
             protected internal static SyntaxNode TriviaCountHelper(SyntaxGenerator generator, string name, SyntaxList<StatementSyntax> ifBlockStatements)
             {
@@ -2023,7 +2024,7 @@ namespace MetaCompilation
 
                 return ifKeyword;
             }
-            
+
             // creates the HasTrailingTrivia check
             protected internal static SyntaxNode TriviaCheckHelper(SyntaxGenerator generator, BlockSyntax methodBlock, SyntaxList<StatementSyntax> ifBlockStatements)
             {
@@ -2304,8 +2305,8 @@ namespace MetaCompilation
 
             // creates a variable holding a DiagnosticDescriptor
             // uses SyntaxFactory for formatting
-            protected internal static FieldDeclarationSyntax CreateEmptyRule(SyntaxGenerator generator, string idName="", string titleDefault="Enter a title for this diagnostic", string messageDefault="Enter a message to be displayed with this diagnostic",
-                                                                    string categoryDefault="Enter a category for this diagnostic (e.g. Formatting)", ExpressionSyntax severityDefault=null, ExpressionSyntax enabledDefault=null)
+            protected internal static FieldDeclarationSyntax CreateEmptyRule(SyntaxGenerator generator, string idName = "", string titleDefault = "Enter a title for this diagnostic", string messageDefault = "Enter a message to be displayed with this diagnostic",
+                                                                    string categoryDefault = "Enter a category for this diagnostic (e.g. Formatting)", ExpressionSyntax severityDefault = null, ExpressionSyntax enabledDefault = null)
             {
                 if (severityDefault == null)
                 {
@@ -2351,7 +2352,7 @@ namespace MetaCompilation
 
                 var enabledArg = generator.Argument("isEnabledByDefault", RefKind.None, enabledDefault).WithLeadingTrivia(SyntaxFactory.Whitespace(whitespace)) as ArgumentSyntax;
                 arguments[5] = enabledArg;
-                
+
                 SyntaxToken identifier = SyntaxFactory.ParseToken("spacingRule");
 
                 var separators = new List<SyntaxToken>();
@@ -2493,7 +2494,6 @@ namespace MetaCompilation
 
             protected internal static SyntaxList<SyntaxNode> CreateRuleList(Document document, List<string> ruleNames)
             {
-              
                 string argumentListString = "";
                 foreach (string ruleName in ruleNames)
                 {

@@ -1,4 +1,5 @@
-﻿// Copyright (c) Microsoft.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System.Collections.Immutable;
 using System.Linq;
@@ -21,7 +22,7 @@ namespace Microsoft.AnalyzerPowerPack.Usage
         private static readonly LocalizableString s_localizableDescriptionCA2229 =
             new LocalizableResourceString(
                 nameof(AnalyzerPowerPackRulesResources.ImplementSerializationConstructorDescription),
-                AnalyzerPowerPackRulesResources.ResourceManager, typeof (AnalyzerPowerPackRulesResources));
+                AnalyzerPowerPackRulesResources.ResourceManager, typeof(AnalyzerPowerPackRulesResources));
 
         internal static DiagnosticDescriptor RuleCA2229 = new DiagnosticDescriptor(RuleCA2229Id,
                                                                         s_localizableTitleCA2229,
@@ -38,16 +39,16 @@ namespace Microsoft.AnalyzerPowerPack.Usage
 
         private static readonly LocalizableString s_localizableTitleCA2237 =
             new LocalizableResourceString(nameof(AnalyzerPowerPackRulesResources.MarkISerializableTypesWithAttribute),
-                AnalyzerPowerPackRulesResources.ResourceManager, typeof (AnalyzerPowerPackRulesResources));
+                AnalyzerPowerPackRulesResources.ResourceManager, typeof(AnalyzerPowerPackRulesResources));
 
         private static readonly LocalizableString s_localizableMessageCA2237 =
             new LocalizableResourceString(nameof(AnalyzerPowerPackRulesResources.AddSerializableAttributeToType),
-                AnalyzerPowerPackRulesResources.ResourceManager, typeof (AnalyzerPowerPackRulesResources));
+                AnalyzerPowerPackRulesResources.ResourceManager, typeof(AnalyzerPowerPackRulesResources));
 
         private static readonly LocalizableString s_localizableDescriptionCA2237 =
             new LocalizableResourceString(
                 nameof(AnalyzerPowerPackRulesResources.MarkISerializableTypesWithAttributeDescription),
-                AnalyzerPowerPackRulesResources.ResourceManager, typeof (AnalyzerPowerPackRulesResources));
+                AnalyzerPowerPackRulesResources.ResourceManager, typeof(AnalyzerPowerPackRulesResources));
 
         internal static DiagnosticDescriptor RuleCA2237 = new DiagnosticDescriptor(RuleCA2237Id,
                                                                         s_localizableTitleCA2237,
@@ -64,16 +65,16 @@ namespace Microsoft.AnalyzerPowerPack.Usage
 
         private static readonly LocalizableString s_localizableTitleCA2235 =
             new LocalizableResourceString(nameof(AnalyzerPowerPackRulesResources.MarkAllNonSerializableFields),
-                AnalyzerPowerPackRulesResources.ResourceManager, typeof (AnalyzerPowerPackRulesResources));
+                AnalyzerPowerPackRulesResources.ResourceManager, typeof(AnalyzerPowerPackRulesResources));
 
         private static readonly LocalizableString s_localizableMessageCA2235 =
             new LocalizableResourceString(nameof(AnalyzerPowerPackRulesResources.FieldIsOfNonSerializableType),
-                AnalyzerPowerPackRulesResources.ResourceManager, typeof (AnalyzerPowerPackRulesResources));
+                AnalyzerPowerPackRulesResources.ResourceManager, typeof(AnalyzerPowerPackRulesResources));
 
         private static readonly LocalizableString s_localizableDescriptionCA2235 =
             new LocalizableResourceString(
                 nameof(AnalyzerPowerPackRulesResources.MarkAllNonSerializableFieldsDescription),
-                AnalyzerPowerPackRulesResources.ResourceManager, typeof (AnalyzerPowerPackRulesResources));
+                AnalyzerPowerPackRulesResources.ResourceManager, typeof(AnalyzerPowerPackRulesResources));
 
         internal static DiagnosticDescriptor RuleCA2235 = new DiagnosticDescriptor(RuleCA2235Id,
                                                                         s_localizableTitleCA2235,
@@ -135,10 +136,10 @@ namespace Microsoft.AnalyzerPowerPack.Usage
             private readonly INamedTypeSymbol _nonSerializedAttributeTypeSymbol;
 
             public Analyzer(
-                INamedTypeSymbol iserializableTypeSymbol, 
-                INamedTypeSymbol serializationInfoTypeSymbol, 
-                INamedTypeSymbol streamingContextTypeSymbol, 
-                INamedTypeSymbol serializableAttributeTypeSymbol, 
+                INamedTypeSymbol iserializableTypeSymbol,
+                INamedTypeSymbol serializationInfoTypeSymbol,
+                INamedTypeSymbol streamingContextTypeSymbol,
+                INamedTypeSymbol serializableAttributeTypeSymbol,
                 INamedTypeSymbol nonSerializedAttributeTypeSymbol)
             {
                 _iserializableTypeSymbol = iserializableTypeSymbol;
@@ -150,7 +151,7 @@ namespace Microsoft.AnalyzerPowerPack.Usage
 
             public void AnalyzeSymbol(SymbolAnalysisContext context)
             {
-                var namedTypeSymbol = (INamedTypeSymbol) context.Symbol;
+                var namedTypeSymbol = (INamedTypeSymbol)context.Symbol;
 
                 // If the type is public and implements ISerializable
                 if (namedTypeSymbol.DeclaredAccessibility == Accessibility.Public && namedTypeSymbol.AllInterfaces.Contains(_iserializableTypeSymbol))

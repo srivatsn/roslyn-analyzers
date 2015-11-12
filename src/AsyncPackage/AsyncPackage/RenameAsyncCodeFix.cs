@@ -1,17 +1,10 @@
-﻿// Copyright (c) Microsoft.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
-using System.Collections.Immutable;
-using System.Composition;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CodeActions;
-using Microsoft.CodeAnalysis.CodeFixes;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Rename;
 
 namespace AsyncPackage
 {
@@ -28,13 +21,10 @@ namespace AsyncPackage
 
         public sealed override async Task RegisterCodeFixesAsync(CodeFixContext context)
         {
-            var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
-
-            var diagnostic = context.Diagnostics.First();
-            var diagnosticSpan = diagnostic.Location.SourceSpan;
-
-            // Find the type declaration identified by the diagnostic.
-            var methodDeclaration = root.FindToken(diagnosticSpan.Start).Parent.FirstAncestorOrSelf<MethodDeclarationSyntax>();
+            object root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
+            object diagnostic = context.Diagnostics.First();
+            object diagnosticSpan = diagnostic.Location.SourceSpan;
+            object methodDeclaration = root.FindToken(diagnosticSpan.Start).Parent.FirstAncestorOrSelf<MethodDeclarationSyntax>();
 
             // Register a code action that will invoke the fix.
             context.RegisterCodeFix(
@@ -45,13 +35,11 @@ namespace AsyncPackage
 
         private async Task<Solution> RenameMethodAsync(Document document, MethodDeclarationSyntax methodDeclaration, CancellationToken cancellationToken)
         {
-            var model = await document.GetSemanticModelAsync().ConfigureAwait(false);
-            var oldSolution = document.Project.Solution;
-
-            var symbol = model.GetDeclaredSymbol(methodDeclaration);
-
-            var oldName = methodDeclaration.Identifier.ToString();
-            var newName = string.Empty;
+            object model = await document.GetSemanticModelAsync().ConfigureAwait(false);
+            object oldSolution = document.Project.Solution;
+            object symbol = model.GetDeclaredSymbol(methodDeclaration);
+            object oldName = methodDeclaration.Identifier.ToString();
+            string newName = string.Empty;
 
             // Check to see if name already contains Async at the end
             if (HasAsyncSuffix(oldName))
@@ -63,13 +51,10 @@ namespace AsyncPackage
                 newName = oldName + "Async";
             }
 
-            var newSolution = await Renamer.RenameSymbolAsync(document.Project.Solution, symbol, newName, document.Project.Solution.Workspace.Options).ConfigureAwait(false);
-
-            // Gets all identifiers to check for renaming conflicts
-            var syntaxTree = await document.GetSyntaxTreeAsync().ConfigureAwait(false);
-            var descendentTokens = syntaxTree.GetRoot().DescendantTokens();
-
-            var usedNames = descendentTokens.Where(token => token.IsKind(SyntaxKind.IdentifierToken)).Select(token => token.Value);
+            object newSolution = await Renamer.RenameSymbolAsync(document.Project.Solution, symbol, newName, document.Project.Solution.Workspace.Options).ConfigureAwait(false);
+            object syntaxTree = await document.GetSyntaxTreeAsync().ConfigureAwait(false);
+            object descendentTokens = syntaxTree.GetRoot().DescendantTokens();
+            object usedNames = descendentTokens.Where(token => token.IsKind(SyntaxKind.IdentifierToken)).Select(token => token.Value);
 
             while (usedNames.Contains(newName))
             {
@@ -89,7 +74,7 @@ namespace AsyncPackage
         {
             if (oldName.Length >= 5)
             {
-                var last5letters = oldName.Substring(oldName.Length - 5);
+                string last5letters = oldName.Substring(oldName.Length - 5);
 
                 // Check case. The A in Async must be capitalized
                 if (last5letters.Contains("async") || last5letters.Contains("asinc"))
@@ -113,8 +98,8 @@ namespace AsyncPackage
 
         private class RenameAsyncCodeAction : CodeAction
         {
-            private Func<CancellationToken, Task<Solution>> _generateSolution;
-            private string _title;
+            private readonly Func<CancellationToken, Task<Solution>> _generateSolution;
+            private readonly string _title;
 
             public RenameAsyncCodeAction(string title, Func<CancellationToken, Task<Solution>> generateSolution)
             {

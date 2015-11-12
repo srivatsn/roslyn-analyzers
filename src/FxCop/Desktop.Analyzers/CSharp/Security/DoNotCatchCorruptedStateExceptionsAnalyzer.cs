@@ -1,4 +1,5 @@
-﻿// Copyright (c) Microsoft.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System.Diagnostics;
 
@@ -16,15 +17,14 @@ namespace Desktop.Analyzers
     {
         protected override Analyzer GetAnalyzer(CompilationSecurityTypes compilationTypes, ISymbol owningSymbol, SyntaxNode codeBlock)
         {
-            return new CSharpAnalyzer(compilationTypes, owningSymbol, codeBlock);        
-        } 
+            return new CSharpAnalyzer(compilationTypes, owningSymbol, codeBlock);
+        }
 
         private sealed class CSharpAnalyzer : Analyzer
         {
-            
             public CSharpAnalyzer(CompilationSecurityTypes compilationTypes, ISymbol owningSymbol, SyntaxNode codeBlock)
                 : base(compilationTypes, owningSymbol, codeBlock)
-            {}
+            { }
 
             public override SyntaxKind CatchClauseKind
             {

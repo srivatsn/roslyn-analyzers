@@ -1,12 +1,5 @@
-﻿// Copyright (c) Microsoft.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
-
-using System;
-using System.Collections.Immutable;
-using System.Threading;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.Diagnostics;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 namespace AsyncPackage
 {
@@ -21,7 +14,7 @@ namespace AsyncPackage
     {
         internal const string BlockingAsyncId = "Async006";
 
-        internal static DiagnosticDescriptor Rule = new DiagnosticDescriptor(id: BlockingAsyncId,
+        internal static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(id: BlockingAsyncId,
             title: "Don't Mix Blocking and Async",
             messageFormat: "This method is blocking on async code",
             category: "Usage",
@@ -44,12 +37,10 @@ namespace AsyncPackage
             if (method != null && method.IsAsync)
             {
                 var invokeMethod = context.SemanticModel.GetSymbolInfo(context.Node).Symbol as IMethodSymbol;
-
-                var location = memberAccessNode.Name.GetLocation();
+                object location = memberAccessNode.Name.GetLocation();
 
                 if (invokeMethod != null && !invokeMethod.IsExtensionMethod)
                 {
-
                     // Checks if the Wait method is called within an async method then creates the diagnostic.
                     if (invokeMethod.OriginalDefinition.Name.Equals("Wait"))
                     {

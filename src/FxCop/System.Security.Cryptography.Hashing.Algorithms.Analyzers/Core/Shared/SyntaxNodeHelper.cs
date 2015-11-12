@@ -1,4 +1,5 @@
-﻿// Copyright (c) Microsoft.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System.Collections.Generic;
 using Microsoft.CodeAnalysis;
@@ -20,7 +21,7 @@ namespace System.Security.Cryptography.Hashing.Algorithms.Analyzers.Common
         public abstract SyntaxNode GetAssignmentLeftNode(SyntaxNode node);
         public abstract SyntaxNode GetAssignmentRightNode(SyntaxNode node);
         public abstract SyntaxNode GetMemberAccessExpressionNode(SyntaxNode node);
-        public abstract SyntaxNode GetMemberAccessNameNode(SyntaxNode node); 
+        public abstract SyntaxNode GetMemberAccessNameNode(SyntaxNode node);
         public abstract SyntaxNode GetCallTargetNode(SyntaxNode node);
         public abstract SyntaxNode GetInvocationExpressionNode(SyntaxNode node);
         public abstract SyntaxNode GetDefaultValueForAnOptionalParameter(SyntaxNode declNode, int paramIndex);
@@ -68,7 +69,7 @@ namespace System.Security.Cryptography.Hashing.Algorithms.Analyzers.Common
 
         public static IEnumerable<IMethodSymbol> GetCalleeMethodSymbols(SyntaxNode node, SemanticModel semanticModel)
         {
-            IMethodSymbol symbol = GetCalleeMethodSymbol(node, semanticModel); 
+            IMethodSymbol symbol = GetCalleeMethodSymbol(node, semanticModel);
             if (symbol != null)
             {
                 return new List<IMethodSymbol>() { symbol };
@@ -151,8 +152,8 @@ namespace System.Security.Cryptography.Hashing.Algorithms.Analyzers.Common
                 return false;
             }
             var value = model.GetConstantValue(node);
-            return value.HasValue && 
-                   value.Value is int && 
+            return value.HasValue &&
+                   value.Value is int &&
                    (int)value.Value == 0;
         }
 

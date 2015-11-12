@@ -1,4 +1,5 @@
-﻿// Copyright (c) Microsoft.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System.Collections.Generic;
 using System.Collections.Immutable;
@@ -59,7 +60,7 @@ namespace Desktop.Analyzers
         private static readonly ImmutableArray<DiagnosticDescriptor> s_supportedDiagnostics = ImmutableArray.Create(DoNotUseMD5SpecificRule,
                                                                                                                   DoNotUseDESSpecificRule,
                                                                                                                   DoNotUseRC2SpecificRule,
-                                                                                                                  DoNotUseTripleDESSpecificRule, 
+                                                                                                                  DoNotUseTripleDESSpecificRule,
                                                                                                                   DoNotUseRIPEMD160SpecificRule,
                                                                                                                   DoNotUseDSASpecificRule);
 
@@ -96,7 +97,7 @@ namespace Desktop.Analyzers
         {
             return types.DES != null
                 || types.DSA != null
-                || types.DSASignatureFormatter != null 
+                || types.DSASignatureFormatter != null
                 || types.HMACMD5 != null
                 || types.RC2 != null
                 || types.TripleDES != null
@@ -106,11 +107,11 @@ namespace Desktop.Analyzers
 
         protected class Analyzer
         {
-            private CompilationSecurityTypes _cryptTypes; 
+            private readonly CompilationSecurityTypes _cryptTypes;
 
             public Analyzer(CompilationSecurityTypes cryptTypes)
             {
-                _cryptTypes = cryptTypes; 
+                _cryptTypes = cryptTypes;
             }
 
             public void AnalyzeNode(SyntaxNodeAnalysisContext context)
@@ -128,7 +129,7 @@ namespace Desktop.Analyzers
                 INamedTypeSymbol type = method.ContainingType;
                 DiagnosticDescriptor rule = null;
 
-                if (type.IsDerivedFrom(this._cryptTypes.DES, baseTypesOnly: true))
+                if (type.IsDerivedFrom(_cryptTypes.DES, baseTypesOnly: true))
                 {
                     rule = DoNotUseDESSpecificRule;
                 }
@@ -160,7 +161,7 @@ namespace Desktop.Analyzers
                 {
                     context.ReportDiagnostic(Diagnostic.Create(rule, node.GetLocation()));
                 }
-            } 
+            }
         }
     }
 }

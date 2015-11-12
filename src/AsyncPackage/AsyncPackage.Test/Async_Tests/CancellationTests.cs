@@ -1,4 +1,5 @@
-﻿// Copyright (c) Microsoft.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -31,7 +32,7 @@ namespace ConsoleApplication1
     }
 }";
 
-        private DiagnosticResult expected005 = new DiagnosticResult
+        private DiagnosticResult _expected005 = new DiagnosticResult
         {
             Id = "Async005",
             Message = "This method can take a CancellationToken",
@@ -100,9 +101,9 @@ namespace ConsoleApplication1
 
             var test = DefaultHeader + body + DefaultFooter;
 
-            expected005.Locations = new[] { new DiagnosticResultLocation("Test0.cs", 16, 13) };
+            _expected005.Locations = new[] { new DiagnosticResultLocation("Test0.cs", 16, 13) };
 
-            VerifyCSharpDiagnostic(test, expected005);
+            VerifyCSharpDiagnostic(test, _expected005);
 
             var fixbody = @"
         public void BigMethod(CancellationToken cancellationToken)
@@ -177,9 +178,9 @@ namespace ConsoleApplication1
 
             var test = DefaultHeader + body + DefaultFooter;
 
-            expected005.Locations = new[] { new DiagnosticResultLocation("Test0.cs", 16, 13) };
+            _expected005.Locations = new[] { new DiagnosticResultLocation("Test0.cs", 16, 13) };
 
-            VerifyCSharpDiagnostic(test, expected005);
+            VerifyCSharpDiagnostic(test, _expected005);
 
             var fixbody = @"
         public void BigMethod(int a, string b, CancellationToken cancellationToken, double c)
@@ -224,9 +225,9 @@ namespace ConsoleApplication1
 
             var test = DefaultHeader + body + DefaultFooter;
 
-            expected005.Locations = new[] { new DiagnosticResultLocation("Test0.cs", 23, 13) };
+            _expected005.Locations = new[] { new DiagnosticResultLocation("Test0.cs", 23, 13) };
 
-            VerifyCSharpDiagnostic(test, expected005);
+            VerifyCSharpDiagnostic(test, _expected005);
 
             var fixbody = @"
         public void BigMethod(int a, string b, CancellationToken cancellationToken, double c)
@@ -272,9 +273,9 @@ namespace ConsoleApplication1
         }";
             var test = DefaultHeader + body + DefaultFooter;
 
-            expected005.Locations = new[] { new DiagnosticResultLocation("Test0.cs", 17, 13) };
+            _expected005.Locations = new[] { new DiagnosticResultLocation("Test0.cs", 17, 13) };
 
-            VerifyCSharpDiagnostic(test, expected005);
+            VerifyCSharpDiagnostic(test, _expected005);
 
             var fixbody = @"
         public void BigMethod(int a, string b, CancellationToken cancellationToken, double c)
@@ -364,9 +365,9 @@ namespace ConsoleApplication1
         }";
             var test = DefaultHeader + body + DefaultFooter;
 
-            expected005.Locations = new[] { new DiagnosticResultLocation("Test0.cs", 16, 38) };
+            _expected005.Locations = new[] { new DiagnosticResultLocation("Test0.cs", 16, 38) };
 
-            VerifyCSharpDiagnostic(test, expected005);
+            VerifyCSharpDiagnostic(test, _expected005);
 
             var fixbody = @"
         public void OuterInvocation(CancellationToken c)
@@ -425,9 +426,9 @@ namespace ConsoleApplication1
         }";
             var test = DefaultHeader + body + DefaultFooter;
 
-            expected005.Locations = new[] { new DiagnosticResultLocation("Test0.cs", 16, 13) };
+            _expected005.Locations = new[] { new DiagnosticResultLocation("Test0.cs", 16, 13) };
 
-            VerifyCSharpDiagnostic(test, expected005);
+            VerifyCSharpDiagnostic(test, _expected005);
 
             var fixbody = @"
         public void BigMethod (int s, CancellationToken ct1, CancellationToken ct2)
@@ -482,9 +483,9 @@ namespace ConsoleApplication1
         }";
             var test = DefaultHeader + body + DefaultFooter;
 
-            expected005.Locations = new[] { new DiagnosticResultLocation("Test0.cs", 16, 13) };
+            _expected005.Locations = new[] { new DiagnosticResultLocation("Test0.cs", 16, 13) };
 
-            VerifyCSharpDiagnostic(test, expected005);
+            VerifyCSharpDiagnostic(test, _expected005);
 
             var fixbody = @"
         public void BigMethod(int s, CancellationToken ct)
@@ -518,9 +519,9 @@ namespace ConsoleApplication1
         }";
             var test = DefaultHeader + body + DefaultFooter;
 
-            expected005.Locations = new[] { new DiagnosticResultLocation("Test0.cs", 16, 13) };
+            _expected005.Locations = new[] { new DiagnosticResultLocation("Test0.cs", 16, 13) };
 
-            VerifyCSharpDiagnostic(test, expected005);
+            VerifyCSharpDiagnostic(test, _expected005);
 
             var fixbody = @"
         public void BigMethod(int s, CancellationToken ct1, CancellationToken ct2, CancellationToken ct3)
@@ -669,9 +670,9 @@ namespace ConsoleApplication1
 
             var test = DefaultHeader + body + DefaultFooter;
 
-            expected005.Locations = new[] { new DiagnosticResultLocation("Test0.cs", 16, 13) };
+            _expected005.Locations = new[] { new DiagnosticResultLocation("Test0.cs", 16, 13) };
 
-            VerifyCSharpDiagnostic(test, expected005);
+            VerifyCSharpDiagnostic(test, _expected005);
 
             var fixbody = @"
         public void BigMethod(CancellationToken ct)

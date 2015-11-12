@@ -1,4 +1,5 @@
-﻿// Copyright (c) Microsoft.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System.Collections.Generic;
 using System.Collections.Immutable;
@@ -17,10 +18,10 @@ namespace Microsoft.CodeAnalysis.Analyzers.FixAnalyzers
     /// This analyzer catches violations of this requirement in the code actions registered by a <see cref="CodeFixProvider"/> that supports <see cref="FixAllProvider"/>.
     /// </summary>
     public abstract class FixerWithFixAllAnalyzer<TLanguageKindEnum> : DiagnosticAnalyzer
-        where TLanguageKindEnum: struct
-    { 
-        private static string s_codeFixProviderMetadataName = "Microsoft.CodeAnalysis.CodeFixes.CodeFixProvider";
-        private static string s_codeActionMetadataName = "Microsoft.CodeAnalysis.CodeActions.CodeAction";
+        where TLanguageKindEnum : struct
+    {
+        private static readonly string s_codeFixProviderMetadataName = "Microsoft.CodeAnalysis.CodeFixes.CodeFixProvider";
+        private static readonly string s_codeActionMetadataName = "Microsoft.CodeAnalysis.CodeActions.CodeAction";
         private const string GetFixAllProviderMethodName = "GetFixAllProvider";
         private const string CreateMethodName = "Create";
         private const string EquivalenceKeyPropertyName = "EquivalenceKey";

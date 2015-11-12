@@ -1,18 +1,10 @@
-﻿// Copyright (c) Microsoft.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
-using System.Collections.Immutable;
-using System.Composition;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CodeActions;
-using Microsoft.CodeAnalysis.CodeFixes;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Formatting;
-using Microsoft.CodeAnalysis.Simplification;
 
 namespace AsyncPackage
 {
@@ -29,18 +21,11 @@ namespace AsyncPackage
 
         public sealed override async Task RegisterCodeFixesAsync(CodeFixContext context)
         {
-            var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
-
-            var diagnostic = context.Diagnostics.First();
-            var diagnosticSpan = diagnostic.Location.SourceSpan;
-
-            // Find the type declaration identified by the diagnostic.
-            //var parent = root.FindToken(diagnosticSpan.Start).Parent;
-            //var invocation = parent.FirstAncestorOrSelf<InvocationExpressionSyntax>();
-
-            var memberAccessNode = root.FindToken(diagnosticSpan.Start).Parent.FirstAncestorOrSelf<MemberAccessExpressionSyntax>();
-
-            var semanticmodel = await context.Document.GetSemanticModelAsync(context.CancellationToken).ConfigureAwait(false);
+            object root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
+            object diagnostic = context.Diagnostics.First();
+            object diagnosticSpan = diagnostic.Location.SourceSpan;
+            object memberAccessNode = root.FindToken(diagnosticSpan.Start).Parent.FirstAncestorOrSelf<MemberAccessExpressionSyntax>();
+            object semanticmodel = await context.Document.GetSemanticModelAsync(context.CancellationToken).ConfigureAwait(false);
 
             var method = semanticmodel.GetEnclosingSymbol(memberAccessNode.SpanStart) as IMethodSymbol;
 
@@ -50,11 +35,11 @@ namespace AsyncPackage
 
                 if (invokeMethod != null)
                 {
-                    var invocation = memberAccessNode.FirstAncestorOrSelf<InvocationExpressionSyntax>();
+                    object invocation = memberAccessNode.FirstAncestorOrSelf<InvocationExpressionSyntax>();
 
                     if (memberAccessNode.Name.Identifier.Text.Equals("Wait"))
                     {
-                        var name = memberAccessNode.Name.Identifier.Text;
+                        object name = memberAccessNode.Name.Identifier.Text;
 
                         // Register a code action that will invoke the fix.
                         context.RegisterCodeFix(
@@ -76,12 +61,11 @@ namespace AsyncPackage
 
                     if (memberAccessNode.Name.Identifier.Text.Equals("Result"))
                     {
-                        
                     }
 
                     if (memberAccessNode.Name.Identifier.Text.Equals("WaitAny"))
                     {
-                        var name = memberAccessNode.Name.Identifier.Text;
+                        object name = memberAccessNode.Name.Identifier.Text;
 
                         // Register a code action that will invoke the fix.
                         context.RegisterCodeFix(
@@ -93,7 +77,7 @@ namespace AsyncPackage
 
                     if (memberAccessNode.Name.Identifier.Text.Equals("WaitAll"))
                     {
-                        var name = memberAccessNode.Name.Identifier.Text;
+                        object name = memberAccessNode.Name.Identifier.Text;
 
                         // Register a code action that will invoke the fix.
                         context.RegisterCodeFix(
@@ -105,7 +89,7 @@ namespace AsyncPackage
 
                     if (memberAccessNode.Name.Identifier.Text.Equals("Sleep"))
                     {
-                        var name = memberAccessNode.Name.Identifier.Text;
+                        object name = memberAccessNode.Name.Identifier.Text;
 
                         // Register a code action that will invoke the fix.
                         context.RegisterCodeFix(
@@ -120,7 +104,7 @@ namespace AsyncPackage
 
                 if (property != null && memberAccessNode.Name.Identifier.Text.Equals("Result"))
                 {
-                    var name = memberAccessNode.Name.Identifier.Text;
+                    object name = memberAccessNode.Name.Identifier.Text;
 
                     // Register a code action that will invoke the fix.
                     context.RegisterCodeFix(
@@ -134,7 +118,7 @@ namespace AsyncPackage
 
         private async Task<Document> ToDelayWhenAnyWhenAllAsync(Document document, InvocationExpressionSyntax invocation, string name, CancellationToken cancellationToken)
         {
-            var simpleExpression = SyntaxFactory.ParseName("");
+            object simpleExpression = SyntaxFactory.ParseName("");
             if (name.Equals("WaitAny"))
             {
                 simpleExpression = SyntaxFactory.ParseName("System.Threading.Tasks.Task.WhenAny").WithAdditionalAnnotations(Simplifier.Annotation);
@@ -149,14 +133,11 @@ namespace AsyncPackage
             }
 
             SyntaxNode oldExpression = invocation;
-            var expression = invocation.WithExpression(simpleExpression).WithLeadingTrivia(invocation.GetLeadingTrivia()).WithTrailingTrivia(invocation.GetTrailingTrivia());
-
-            var newExpression = SyntaxFactory.AwaitExpression(expression.WithLeadingTrivia(SyntaxFactory.Space)).WithTrailingTrivia(invocation.GetTrailingTrivia()).WithLeadingTrivia(invocation.GetLeadingTrivia());
-
-            var oldroot = await document.GetSyntaxRootAsync(cancellationToken).ConfigureAwait(false);
-            var newroot = oldroot.ReplaceNode(oldExpression, newExpression);
-
-            var newDocument = document.WithSyntaxRoot(newroot);
+            object expression = invocation.WithExpression(simpleExpression).WithLeadingTrivia(invocation.GetLeadingTrivia()).WithTrailingTrivia(invocation.GetTrailingTrivia());
+            object newExpression = SyntaxFactory.AwaitExpression(expression.WithLeadingTrivia(SyntaxFactory.Space)).WithTrailingTrivia(invocation.GetTrailingTrivia()).WithLeadingTrivia(invocation.GetLeadingTrivia());
+            object oldroot = await document.GetSyntaxRootAsync(cancellationToken).ConfigureAwait(false);
+            object newroot = oldroot.ReplaceNode(oldExpression, newExpression);
+            object newDocument = document.WithSyntaxRoot(newroot);
 
             return newDocument;
         }
@@ -168,14 +149,13 @@ namespace AsyncPackage
 
             if (name.Equals("Wait"))
             {
-                var expression = (invocation.Expression as MemberAccessExpressionSyntax).Expression;
+                object expression = (invocation.Expression as MemberAccessExpressionSyntax).Expression;
                 newExpression = SyntaxFactory.AwaitExpression(expression).WithAdditionalAnnotations(Formatter.Annotation);
             }
 
-            var oldroot = await document.GetSyntaxRootAsync(cancellationToken).ConfigureAwait(false);
-            var newroot = oldroot.ReplaceNode(oldExpression, newExpression);
-
-            var newDocument = document.WithSyntaxRoot(newroot);
+            object oldroot = await document.GetSyntaxRootAsync(cancellationToken).ConfigureAwait(false);
+            object newroot = oldroot.ReplaceNode(oldExpression, newExpression);
+            object newDocument = document.WithSyntaxRoot(newroot);
 
             return newDocument;
         }
@@ -192,8 +172,8 @@ namespace AsyncPackage
 
             if (newExpression != null)
             {
-                var oldroot = await document.GetSyntaxRootAsync(cancellationToken).ConfigureAwait(false);
-                var newroot = oldroot.ReplaceNode(oldExpression, newExpression);
+                object oldroot = await document.GetSyntaxRootAsync(cancellationToken).ConfigureAwait(false);
+                object newroot = oldroot.ReplaceNode(oldExpression, newExpression);
 
                 document = document.WithSyntaxRoot(newroot);
             }
@@ -210,12 +190,11 @@ namespace AsyncPackage
             }
 
             var oldExpression = expression as ExpressionStatementSyntax;
-            var awaitedInvocation = SyntaxFactory.AwaitExpression(invocation.WithLeadingTrivia(SyntaxFactory.Space)).WithLeadingTrivia(invocation.GetLeadingTrivia());
-            var newExpression = oldExpression.WithExpression(awaitedInvocation);
-
-            var oldroot = await document.GetSyntaxRootAsync(cancellationTkn).ConfigureAwait(false);
-            var newroot = oldroot.ReplaceNode(oldExpression, newExpression);
-            var newDocument = document.WithSyntaxRoot(newroot);
+            object awaitedInvocation = SyntaxFactory.AwaitExpression(invocation.WithLeadingTrivia(SyntaxFactory.Space)).WithLeadingTrivia(invocation.GetLeadingTrivia());
+            object newExpression = oldExpression.WithExpression(awaitedInvocation);
+            object oldroot = await document.GetSyntaxRootAsync(cancellationTkn).ConfigureAwait(false);
+            object newroot = oldroot.ReplaceNode(oldExpression, newExpression);
+            object newDocument = document.WithSyntaxRoot(newroot);
 
             return newDocument;
         }
@@ -227,8 +206,8 @@ namespace AsyncPackage
 
         private class CodeActionToDelayWhenAnyWhenAllAsync : CodeAction
         {
-            private Func<CancellationToken, Task<Document>> _generateDocument;
-            private string _title;
+            private readonly Func<CancellationToken, Task<Document>> _generateDocument;
+            private readonly string _title;
 
             public CodeActionToDelayWhenAnyWhenAllAsync(string title, Func<CancellationToken, Task<Document>> generateDocument)
             {
@@ -254,8 +233,8 @@ namespace AsyncPackage
 
         private class CodeActionChangetoAwaitAsync : CodeAction
         {
-            private Func<CancellationToken, Task<Document>> _generateDocument;
-            private string _title;
+            private readonly Func<CancellationToken, Task<Document>> _generateDocument;
+            private readonly string _title;
 
             public CodeActionChangetoAwaitAsync(string title, Func<CancellationToken, Task<Document>> generateDocument)
             {
@@ -281,8 +260,8 @@ namespace AsyncPackage
 
         private class CodeActionChangetoAwaitGetAwaiterAsync : CodeAction
         {
-            private Func<CancellationToken, Task<Document>> _generateDocument;
-            private string _title;
+            private readonly Func<CancellationToken, Task<Document>> _generateDocument;
+            private readonly string _title;
 
             public CodeActionChangetoAwaitGetAwaiterAsync(string title, Func<CancellationToken, Task<Document>> generateDocument)
             {

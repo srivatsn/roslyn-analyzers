@@ -1,4 +1,7 @@
-﻿using Microsoft.CodeAnalysis;
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Text;
@@ -16,12 +19,12 @@ namespace TestHelper
     /// </summary>
     public abstract partial class DiagnosticVerifier
     {
-        private static readonly MetadataReference CorlibReference = MetadataReference.CreateFromFile(typeof(object).Assembly.Location);
-        private static readonly MetadataReference SystemCoreReference = MetadataReference.CreateFromFile(typeof(Enumerable).Assembly.Location);
-        private static readonly MetadataReference CSharpSymbolsReference = MetadataReference.CreateFromFile(typeof(CSharpCompilation).Assembly.Location);
-        private static readonly MetadataReference CodeAnalysisReference = MetadataReference.CreateFromFile(typeof(Compilation).Assembly.Location);
-        private static readonly MetadataReference SystemCollectionsImmutableReference = MetadataReference.CreateFromFile(typeof(ImmutableArray).Assembly.Location); 
-        private static readonly MetadataReference RuntimeReference = MetadataReference.CreateFromFile(System.IO.Path.Combine(System.IO.Path.GetDirectoryName(typeof(object).Assembly.Location), "System.Runtime.dll"));
+        private static readonly MetadataReference s_corlibReference = MetadataReference.CreateFromFile(typeof(object).Assembly.Location);
+        private static readonly MetadataReference s_systemCoreReference = MetadataReference.CreateFromFile(typeof(Enumerable).Assembly.Location);
+        private static readonly MetadataReference s_CSharpSymbolsReference = MetadataReference.CreateFromFile(typeof(CSharpCompilation).Assembly.Location);
+        private static readonly MetadataReference s_codeAnalysisReference = MetadataReference.CreateFromFile(typeof(Compilation).Assembly.Location);
+        private static readonly MetadataReference s_systemCollectionsImmutableReference = MetadataReference.CreateFromFile(typeof(ImmutableArray).Assembly.Location);
+        private static readonly MetadataReference s_runtimeReference = MetadataReference.CreateFromFile(System.IO.Path.Combine(System.IO.Path.GetDirectoryName(typeof(object).Assembly.Location), "System.Runtime.dll"));
 
         internal static string DefaultFilePathPrefix = "Test";
         internal static string CSharpDefaultFileExt = "cs";
@@ -160,12 +163,12 @@ namespace TestHelper
             var solution = new AdhocWorkspace()
                 .CurrentSolution
                 .AddProject(projectId, TestProjectName, TestProjectName, language)
-                .AddMetadataReference(projectId, CorlibReference)
-                .AddMetadataReference(projectId, SystemCoreReference)
-                .AddMetadataReference(projectId, CSharpSymbolsReference)
-                .AddMetadataReference(projectId, CodeAnalysisReference)
-                .AddMetadataReference(projectId, SystemCollectionsImmutableReference)
-                .AddMetadataReference(projectId, RuntimeReference);
+                .AddMetadataReference(projectId, s_corlibReference)
+                .AddMetadataReference(projectId, s_systemCoreReference)
+                .AddMetadataReference(projectId, s_CSharpSymbolsReference)
+                .AddMetadataReference(projectId, s_codeAnalysisReference)
+                .AddMetadataReference(projectId, s_systemCollectionsImmutableReference)
+                .AddMetadataReference(projectId, s_runtimeReference);
 
             int count = 0;
             foreach (var source in sources)

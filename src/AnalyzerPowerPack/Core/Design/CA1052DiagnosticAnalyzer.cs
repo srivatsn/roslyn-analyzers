@@ -1,4 +1,5 @@
-﻿// Copyright (c) Microsoft.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
 using System.Collections.Generic;
@@ -55,7 +56,7 @@ namespace Microsoft.AnalyzerPowerPack.Design
             AnalyzerPowerPackRulesResources.ResourceManager,
             typeof(AnalyzerPowerPackRulesResources));
 
-        internal static DiagnosticDescriptor Rule = new DiagnosticDescriptor(
+        internal static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(
             DiagnosticId,
             s_title,
             s_messageFormat,

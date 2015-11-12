@@ -1,4 +1,6 @@
-﻿//  Copyright (c) Microsoft.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
 using System;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -12,7 +14,7 @@ namespace MetaCompilation.Test
     public class UnitTest : CodeFixVerifier
     {
         private const string s_messagePrefix = "T: ";
-        
+
         #region default no diagnostics tests
         // no diagnostics
         [Fact]
@@ -12091,7 +12093,7 @@ namespace SyntaxNodeAnalyzer
         #endregion
 
         #region IncorrectAccessorReturn
-        
+
         private const string s_incorrectAccessorReturnMessage = s_messagePrefix + "The get-accessor should return an ImmutableArray containing all of the DiagnosticDescriptor rules";
 
         [Fact]
@@ -15604,7 +15606,7 @@ namespace SyntaxNodeAnalyzer
     }";
 
             var expected = new DiagnosticResult
-            { 
+            {
                 Id = MetaCompilationAnalyzer.TrailingTriviaKindCheckIncorrect,
                 Message = s_trailingTriviaKindCheckIncorrectMessage,
                 Severity = DiagnosticSeverity.Error,
@@ -15725,7 +15727,7 @@ namespace SyntaxNodeAnalyzer
     }";
 
             var expected = new DiagnosticResult
-            { 
+            {
                 Id = MetaCompilationAnalyzer.TrailingTriviaKindCheckIncorrect,
                 Message = s_trailingTriviaKindCheckIncorrectMessage,
                 Severity = DiagnosticSeverity.Error,
@@ -15788,7 +15790,7 @@ namespace SyntaxNodeAnalyzer
 
             VerifyCSharpFix(test, fixtest);
         }
-        
+
         //  Doesn't access kind method
         [Fact]
         public void TriviaKindIncorrect3()
@@ -15909,7 +15911,7 @@ namespace SyntaxNodeAnalyzer
 
             VerifyCSharpFix(test, fixtest);
         }
-        
+
         //  Accesses different method (not kind)
         [Fact]
         public void TrailingKindIncorrect4()
@@ -16030,7 +16032,7 @@ namespace SyntaxNodeAnalyzer
 
             VerifyCSharpFix(test, fixtest);
         }
-        
+
         // one equals sign
         [Fact]
         public void TrailingKindIncorrect5()
@@ -16088,7 +16090,7 @@ namespace SyntaxNodeAnalyzer
     }";
 
             var expected = new DiagnosticResult
-            { 
+            {
                 Id = MetaCompilationAnalyzer.TrailingTriviaKindCheckIncorrect,
                 Message = s_trailingTriviaKindCheckIncorrectMessage,
                 Severity = DiagnosticSeverity.Error,
@@ -16151,7 +16153,7 @@ namespace SyntaxNodeAnalyzer
 
             VerifyCSharpFix(test, fixtest);
         }
-        
+
         // wrong member accessor
         [Fact]
         public void TrailingKindIncorrect6()
@@ -16272,7 +16274,7 @@ namespace SyntaxNodeAnalyzer
 
             VerifyCSharpFix(test, fixtest);
         }
-        
+
         //  wrong accessed
         [Fact]
         public void TrailingKindIncorrect7()
@@ -16393,7 +16395,7 @@ namespace SyntaxNodeAnalyzer
 
             VerifyCSharpFix(test, fixtest);
         }
-        
+
         //  first statement not member access
         [Fact]
         public void TrailingKindIncorrect8()
@@ -16514,7 +16516,7 @@ namespace SyntaxNodeAnalyzer
 
             VerifyCSharpFix(test, fixtest);
         }
-        
+
         //  second statement not member access
         [Fact]
         public void TrailingKindIncorrect9()
@@ -16635,7 +16637,7 @@ namespace SyntaxNodeAnalyzer
 
             VerifyCSharpFix(test, fixtest);
         }
-        
+
         //  no condition
         [Fact]
         public void TrailingKindIncorrect10()
@@ -16877,7 +16879,7 @@ namespace SyntaxNodeAnalyzer
 
             VerifyCSharpFix(test, fixtest);
         }
-        
+
         //  statements within if statement
         [Fact]
         public void TrailingKind12()
@@ -20045,7 +20047,7 @@ namespace SyntaxNodeAnalyzerAnalyzer
         #endregion
 
         #region TooManyStatements
-        
+
         // Trivia check block
         [Fact]
         public void TooManyStatements1()

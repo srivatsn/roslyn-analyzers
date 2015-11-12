@@ -1,10 +1,5 @@
-﻿// Copyright (c) Microsoft.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
-
-using System;
-using System.Collections.Immutable;
-using System.Threading;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.Diagnostics;
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 namespace AsyncPackage
 {
@@ -16,7 +11,7 @@ namespace AsyncPackage
     {
         internal const string RenameAsyncId = "Async002";
 
-        internal static DiagnosticDescriptor RenameAsyncMethod = new DiagnosticDescriptor(id: RenameAsyncId,
+        internal static readonly DiagnosticDescriptor RenameAsyncMethod = new DiagnosticDescriptor(id: RenameAsyncId,
             title: "Async Method Names Should End in Async",
             messageFormat: "This method is async but the method name does not end in Async",
             category: "Naming",

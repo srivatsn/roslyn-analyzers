@@ -1,4 +1,5 @@
-﻿// Copyright (c) Microsoft.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
 using System.Collections.Generic;
@@ -30,12 +31,12 @@ namespace Microsoft.CodeAnalysis.UnitTests
         private static readonly CompilationOptions s_CSharpDefaultOptions = new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary);
         private static readonly CompilationOptions s_visualBasicDefaultOptions = new VisualBasicCompilationOptions(OutputKind.DynamicallyLinkedLibrary);
 
-        internal static string DefaultFilePathPrefix = "Test";
-        internal static string CSharpDefaultFileExt = "cs";
-        internal static string VisualBasicDefaultExt = "vb";
-        internal static string CSharpDefaultFilePath = DefaultFilePathPrefix + 0 + "." + CSharpDefaultFileExt;
-        internal static string VisualBasicDefaultFilePath = DefaultFilePathPrefix + 0 + "." + VisualBasicDefaultExt;
-        internal static string TestProjectName = "TestProject";
+        internal static readonly string DefaultFilePathPrefix = "Test";
+        internal static readonly string CSharpDefaultFileExt = "cs";
+        internal static readonly string VisualBasicDefaultExt = "vb";
+        internal static readonly string CSharpDefaultFilePath = DefaultFilePathPrefix + 0 + "." + CSharpDefaultFileExt;
+        internal static readonly string VisualBasicDefaultFilePath = DefaultFilePathPrefix + 0 + "." + VisualBasicDefaultExt;
+        internal static readonly string TestProjectName = "TestProject";
 
         protected abstract DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer();
         protected abstract DiagnosticAnalyzer GetBasicDiagnosticAnalyzer();

@@ -1,4 +1,5 @@
-﻿// Copyright (c) Microsoft.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.CodeAnalysis.Diagnostics;
 using Roslyn.Diagnostics.Analyzers;
@@ -310,7 +311,7 @@ struct C : B
             string expectedMessage1 = string.Format(RoslynDiagnosticsResources.ImplementIEquatableMessage, "B");
             string expectedMessage2 = string.Format(RoslynDiagnosticsResources.ImplementIEquatableMessage, "C");
             VerifyCSharp(code,
-                GetCSharpResultAt( 6, 26, RoslynDiagnosticIds.ImplementIEquatableRuleId, expectedMessage1),
+                GetCSharpResultAt(6, 26, RoslynDiagnosticIds.ImplementIEquatableRuleId, expectedMessage1),
                 GetCSharpResultAt(14, 26, RoslynDiagnosticIds.ImplementIEquatableRuleId, expectedMessage2));
         }
 

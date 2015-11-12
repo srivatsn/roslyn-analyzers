@@ -1,4 +1,5 @@
-﻿// Copyright (c) Microsoft.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System.Collections.Generic;
 using System.Collections.Immutable;
@@ -17,7 +18,7 @@ namespace System.Runtime.Analyzers
             where TTypeDeclarationSyntax : SyntaxNode
     {
         internal const string RuleId = "CA1001";
-        internal const string Dispose = "Dispose";               
+        internal const string Dispose = "Dispose";
 
         internal static DiagnosticDescriptor Rule = new DiagnosticDescriptor(RuleId,
                                                                          new LocalizableResourceString(nameof(SystemRuntimeAnalyzersResources.TypesThatOwnDisposableFieldsShouldBeDisposable), SystemRuntimeAnalyzersResources.ResourceManager, typeof(SystemRuntimeAnalyzersResources)),
@@ -34,7 +35,7 @@ namespace System.Runtime.Analyzers
         {
             analysisContext.RegisterCompilationStartAction(compilationContext =>
             {
-                var disposableType = WellKnownTypes.IDisposable(compilationContext.Compilation);        
+                var disposableType = WellKnownTypes.IDisposable(compilationContext.Compilation);
 
                 if (disposableType == null)
                 {
@@ -54,13 +55,13 @@ namespace System.Runtime.Analyzers
 
         protected abstract class DisposableFieldAnalyzer
         {
-            private INamedTypeSymbol _disposableTypeSymbol;   
+            private readonly INamedTypeSymbol _disposableTypeSymbol;
 
             public DisposableFieldAnalyzer(INamedTypeSymbol disposableTypeSymbol)
             {
-                _disposableTypeSymbol = disposableTypeSymbol;       
+                _disposableTypeSymbol = disposableTypeSymbol;
             }
-                                                                               
+
             public void AnalyzeSymbol(SymbolAnalysisContext symbolContext)
             {
                 INamedTypeSymbol namedType = (INamedTypeSymbol)symbolContext.Symbol;
@@ -80,8 +81,8 @@ namespace System.Runtime.Analyzers
                         {
                             var model = symbolContext.Compilation.GetSemanticModel(classDecl.SyntaxTree);
                             var syntaxNodes = classDecl.DescendantNodes(n => !(n is TTypeDeclarationSyntax) || ReferenceEquals(n, classDecl))
-                                .Where(n => IsDisposableFieldCreation(n, 
-                                                                    model, 
+                                .Where(n => IsDisposableFieldCreation(n,
+                                                                    model,
                                                                     disposableFieldsHashSet,
                                                                     symbolContext.CancellationToken));
                             if (syntaxNodes.Any())
@@ -89,7 +90,7 @@ namespace System.Runtime.Analyzers
                                 symbolContext.ReportDiagnostic(namedType.CreateDiagnostic(Rule, namedType.Name));
                                 return;
                             }
-                        }  
+                        }
                     }
                 }
             }
@@ -110,7 +111,6 @@ namespace System.Runtime.Analyzers
             }
 
             protected abstract bool IsDisposableFieldCreation(SyntaxNode node, SemanticModel model, HashSet<ISymbol> disposableFields, CancellationToken cancellationToken);
-
         }
     }
 }

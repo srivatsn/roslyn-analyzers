@@ -1,4 +1,5 @@
-﻿// Copyright (c) Microsoft.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
 using Microsoft.CodeAnalysis;
@@ -37,23 +38,23 @@ namespace TestTemplate
     /// </summary>
     public struct DiagnosticResult
     {
-        private DiagnosticResultLocation[] locations;
+        private DiagnosticResultLocation[] _locations;
 
         public DiagnosticResultLocation[] Locations
         {
             get
             {
-                if (this.locations == null)
+                if (_locations == null)
                 {
-                    this.locations = new DiagnosticResultLocation[0];
+                    _locations = new DiagnosticResultLocation[0];
                 }
 
-                return this.locations;
+                return _locations;
             }
 
             set
             {
-                this.locations = value;
+                _locations = value;
             }
         }
 

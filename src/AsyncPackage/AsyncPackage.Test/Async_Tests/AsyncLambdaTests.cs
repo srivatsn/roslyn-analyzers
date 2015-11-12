@@ -1,4 +1,5 @@
-﻿// Copyright (c) Microsoft.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -30,7 +31,7 @@ namespace ConsoleApplication1
     }
 }";
 
-        private DiagnosticResult expected003 = new DiagnosticResult
+        private readonly DiagnosticResult _expected003 = new DiagnosticResult
         {
             Id = "Async003",
             Message = "This async lambda is passed as a void-returning delegate type",
@@ -40,7 +41,7 @@ namespace ConsoleApplication1
             Locations = new[] { new DiagnosticResultLocation("Test0.cs", 10, 10) }
         };
 
-        private DiagnosticResult expected004 = new DiagnosticResult
+        private readonly DiagnosticResult _expected004 = new DiagnosticResult
         {
             Id = "Async004",
             Message = "This async lambda is stored as a void-returning delegate type",
@@ -83,9 +84,9 @@ namespace ConsoleApplication1
 
             var test = DefaultHeader + body + DefaultFooter;
 
-            expected004.Locations = new[] { new DiagnosticResultLocation("Test0.cs", 16, 17) };
+            _expected004.Locations = new[] { new DiagnosticResultLocation("Test0.cs", 16, 17) };
 
-            VerifyCSharpDiagnostic(test, expected004);
+            VerifyCSharpDiagnostic(test, _expected004);
 
             var fix = @"
             public void method()
@@ -141,9 +142,9 @@ namespace ConsoleApplication1
         ";
             var test = DefaultHeader + body + DefaultFooter;
 
-            expected003.Locations = new[] { new DiagnosticResultLocation("Test0.cs", 20, 32) };
+            _expected003.Locations = new[] { new DiagnosticResultLocation("Test0.cs", 20, 32) };
 
-            VerifyCSharpDiagnostic(test, expected003);
+            VerifyCSharpDiagnostic(test, _expected003);
         }
 
         // Method with correct delegate type - no diagnostic should show
@@ -229,9 +230,9 @@ namespace ConsoleApplication1
 
             var test = DefaultHeader + body + DefaultFooter;
 
-            expected003.Locations = new[] { new DiagnosticResultLocation("Test0.cs", 20, 32) };
+            _expected003.Locations = new[] { new DiagnosticResultLocation("Test0.cs", 20, 32) };
 
-            VerifyCSharpDiagnostic(test, expected003);
+            VerifyCSharpDiagnostic(test, _expected003);
         }
 
         // Test simple lambda correct - no diagnostic should show
@@ -269,9 +270,9 @@ namespace ConsoleApplication1
         ";
             var test = DefaultHeader + body + DefaultFooter;
 
-            expected003.Locations = new[] { new DiagnosticResultLocation("Test0.cs", 20, 32) };
+            _expected003.Locations = new[] { new DiagnosticResultLocation("Test0.cs", 20, 32) };
 
-            VerifyCSharpDiagnostic(test, expected003);
+            VerifyCSharpDiagnostic(test, _expected003);
         }
 
         // Missing necessary using directives - 1 diagnostic
@@ -304,9 +305,9 @@ namespace ConsoleApplication1
 }";
             var test = body;
 
-            expected003.Locations = new[] { new DiagnosticResultLocation("Test0.cs", 18, 32) };
+            _expected003.Locations = new[] { new DiagnosticResultLocation("Test0.cs", 18, 32) };
 
-            VerifyCSharpDiagnostic(test, expected003);
+            VerifyCSharpDiagnostic(test, _expected003);
         }
     }
 }

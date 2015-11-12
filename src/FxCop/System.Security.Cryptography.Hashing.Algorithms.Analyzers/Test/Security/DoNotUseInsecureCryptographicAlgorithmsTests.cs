@@ -1,17 +1,18 @@
-﻿// Copyright (c) Microsoft.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the projecVerifyCSharp(t root for license information.
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.UnitTests;
-using Xunit;                                                        
+using Xunit;
 
 namespace System.Security.Cryptography.Hashing.Algorithms.Analyzers.UnitTests
 {
     public class DoNotUseInsecureCryptographicAlgorithmsTests : DiagnosticAnalyzerTestBase
     {
         #region CA5350 
-                
+
         [Fact]
-	    public void CA5350UseMD5CreateInMethodDeclaration()
+        public void CA5350UseMD5CreateInMethodDeclaration()
         {
             VerifyCSharp(@"
 using System.Security.Cryptography;
@@ -25,8 +26,8 @@ namespace TestNamespace
             var md5 = MD5.Create();
         }
     }
-}", 
-            GetCSharpResultAt(10, 23, CA5350RuleName, DoNotUseMD5Message));
+}",
+            GetCSharpResultAt(10, 23, CA5350RuleName, _doNotUseMD5Message));
 
             VerifyBasic(@"
 Imports System.Security.Cryptography
@@ -36,11 +37,11 @@ Module TestClass
         Dim md5alg As MD5 = MD5.Create()
     End Sub
 End Module",
-            GetBasicResultAt(6, 29, CA5350RuleName, DoNotUseMD5Message));
+            GetBasicResultAt(6, 29, CA5350RuleName, _doNotUseMD5Message));
         }
-//NO VB
+        //NO VB
         [Fact]
-	    public void CA5350UseMD5CreateInPropertyDeclaration()
+        public void CA5350UseMD5CreateInPropertyDeclaration()
         {
             VerifyCSharp(@"
 using System.Security.Cryptography;
@@ -51,9 +52,7 @@ namespace TestNamespace
         public MD5 GetMD5 => MD5.Create();
     }
 }",
-            GetCSharpResultAt(7, 30, CA5350RuleName, DoNotUseMD5Message));
-
-           
+            GetCSharpResultAt(7, 30, CA5350RuleName, _doNotUseMD5Message));
         }
 
         [Fact]
@@ -71,7 +70,7 @@ namespace TestNamespace
         }
     }
 }",
-            GetCSharpResultAt(9, 26, CA5350RuleName, DoNotUseMD5Message));
+            GetCSharpResultAt(9, 26, CA5350RuleName, _doNotUseMD5Message));
 
             VerifyBasic(@"
 Imports System.Security.Cryptography
@@ -84,12 +83,11 @@ Namespace TestNamespace
 		End Property
 	End Class
 End Namespace",
-         GetBasicResultAt(7, 12, CA5350RuleName, DoNotUseMD5Message));
-
+         GetBasicResultAt(7, 12, CA5350RuleName, _doNotUseMD5Message));
         }
 
         [Fact]
-	    public void CA5350UseMD5CreateInFieldDeclaration()
+        public void CA5350UseMD5CreateInFieldDeclaration()
         {
             VerifyCSharp(@"
 using System.Security.Cryptography;
@@ -100,7 +98,7 @@ namespace TestNamespace
         public HashAlgorithm Alg = MD5.Create();  
     }
 }",
-            GetCSharpResultAt(7, 36, CA5350RuleName, DoNotUseMD5Message));
+            GetCSharpResultAt(7, 36, CA5350RuleName, _doNotUseMD5Message));
 
             VerifyBasic(@"
 Imports System.Security.Cryptography
@@ -109,12 +107,11 @@ Namespace TestNamespace
 		Public Alg As HashAlgorithm = MD5.Create()
 	End Class
 End Namespace",
-         GetBasicResultAt(5, 33, CA5350RuleName, DoNotUseMD5Message));
+         GetBasicResultAt(5, 33, CA5350RuleName, _doNotUseMD5Message));
+        }
 
-        }   
-        
         [Fact]
-		public void CA5350UseMD5CreateInLambdaExpression()
+        public void CA5350UseMD5CreateInLambdaExpression()
         {
             VerifyCSharp(@"
 using System.Security.Cryptography;
@@ -129,7 +126,7 @@ namespace TestNamespace
         }
     }
 }",
-            GetCSharpResultAt(10, 36, CA5350RuleName, DoNotUseMD5Message));
+            GetCSharpResultAt(10, 36, CA5350RuleName, _doNotUseMD5Message));
 
             VerifyBasic(@"
 Imports System.Security.Cryptography
@@ -143,12 +140,11 @@ End Function)
 		End Function
 	End Class
 End Namespace",
-         GetBasicResultAt(8, 4, CA5350RuleName, DoNotUseMD5Message));
-
+         GetBasicResultAt(8, 4, CA5350RuleName, _doNotUseMD5Message));
         }
-        
+
         [Fact]
-		public void CA5350UseMD5CreateInAnonymousMethodExpression()
+        public void CA5350UseMD5CreateInAnonymousMethodExpression()
         {
             VerifyCSharp(@"
 using System.Security.Cryptography;
@@ -160,7 +156,7 @@ namespace TestNamespace
         Del d = delegate () { MD5.Create(); };
     }
 }",
-            GetCSharpResultAt(8, 31, CA5350RuleName, DoNotUseMD5Message));
+            GetCSharpResultAt(8, 31, CA5350RuleName, _doNotUseMD5Message));
 
             VerifyBasic(@"
 Imports System.Security.Cryptography
@@ -170,14 +166,13 @@ Namespace TestNamespace
 		Private d As Del = Sub() MD5.Create()
 	End Class
 End Namespace",
-        GetBasicResultAt(6, 28, CA5350RuleName, DoNotUseMD5Message));
+        GetBasicResultAt(6, 28, CA5350RuleName, _doNotUseMD5Message));
+        }
 
-        }        
-        
         [Fact]
-		public void CA5350CreateObjectFromMD5DerivedClass()
+        public void CA5350CreateObjectFromMD5DerivedClass()
         {
-            VerifyCSharp( new[] {
+            VerifyCSharp(new[] {
 //Test0
 @"
 using System.Security.Cryptography;
@@ -217,7 +212,7 @@ namespace TestNamespace
         }
     }
 }" },
-            GetCSharpResultAt(10, 25, CA5350RuleName, DoNotUseMD5Message));
+            GetCSharpResultAt(10, 25, CA5350RuleName, _doNotUseMD5Message));
 
             VerifyBasic(new[] {
 //Test0
@@ -253,7 +248,7 @@ Namespace TestNamespace
 	End Class
 End Namespace"},
 
-        GetBasicResultAt(7, 16, CA5350RuleName, DoNotUseMD5Message));
+        GetBasicResultAt(7, 16, CA5350RuleName, _doNotUseMD5Message));
         }
 
         #endregion
@@ -276,7 +271,7 @@ namespace TestNamespace
         }
     }
 }",
-            GetCSharpResultAt(10, 24, CA5351RuleName, DoNotUseSHA1Message));
+            GetCSharpResultAt(10, 24, CA5351RuleName, _doNotUseSHA1Message));
 
             VerifyBasic(@"
 Imports System.Security.Cryptography
@@ -286,9 +281,9 @@ Module TestClass
         Dim sha1alg As SHA1 = SHA1.Create()
     End Sub
 End Module",
-            GetBasicResultAt(6, 31, CA5351RuleName, DoNotUseSHA1Message));
+            GetBasicResultAt(6, 31, CA5351RuleName, _doNotUseSHA1Message));
         }
-//NO VB
+        //NO VB
         [Fact]
         public void CA5354UseSHA1CreateInPropertyDeclaration()
         {
@@ -301,7 +296,7 @@ namespace TestNamespace
         public SHA1 GetSHA1 => SHA1.Create();
     }
 }",
-            GetCSharpResultAt(7, 32, CA5351RuleName, DoNotUseSHA1Message));
+            GetCSharpResultAt(7, 32, CA5351RuleName, _doNotUseSHA1Message));
         }
 
         [Fact]
@@ -319,7 +314,7 @@ namespace TestNamespace
         }
     }
 }",
-            GetCSharpResultAt(9, 26, CA5351RuleName, DoNotUseSHA1Message));
+            GetCSharpResultAt(9, 26, CA5351RuleName, _doNotUseSHA1Message));
 
             VerifyBasic(@"
 Imports System.Security.Cryptography
@@ -332,7 +327,7 @@ Namespace TestNamespace
 		End Property
 	End Class
 End Namespace",
-           GetBasicResultAt(7, 12, CA5351RuleName, DoNotUseSHA1Message));
+           GetBasicResultAt(7, 12, CA5351RuleName, _doNotUseSHA1Message));
         }
 
         [Fact]
@@ -347,7 +342,7 @@ namespace TestNamespace
         public HashAlgorithm Alg = SHA1.Create();  
     }
 }",
-            GetCSharpResultAt(7, 36, CA5351RuleName, DoNotUseSHA1Message));
+            GetCSharpResultAt(7, 36, CA5351RuleName, _doNotUseSHA1Message));
 
             VerifyBasic(@"
 Imports System.Security.Cryptography
@@ -356,7 +351,7 @@ Namespace TestNamespace
 		Public Alg As HashAlgorithm = SHA1.Create()
 	End Class
 End Namespace",
-         GetBasicResultAt(5, 33, CA5351RuleName, DoNotUseSHA1Message));
+         GetBasicResultAt(5, 33, CA5351RuleName, _doNotUseSHA1Message));
         }
 
         [Fact]
@@ -375,7 +370,7 @@ namespace TestNamespace
         }
     }
 }",
-            GetCSharpResultAt(10, 36, CA5351RuleName, DoNotUseSHA1Message));
+            GetCSharpResultAt(10, 36, CA5351RuleName, _doNotUseSHA1Message));
 
             VerifyBasic(@"
 Imports System.Security.Cryptography
@@ -389,7 +384,7 @@ End Function)
 		End Function
 	End Class
 End Namespace",
-        GetBasicResultAt(8, 4, CA5351RuleName, DoNotUseSHA1Message));
+        GetBasicResultAt(8, 4, CA5351RuleName, _doNotUseSHA1Message));
         }
 
         [Fact]
@@ -405,7 +400,7 @@ namespace TestNamespace
         Del d = delegate () { SHA1.Create(); };
     }
 }",
-            GetCSharpResultAt(8, 31, CA5351RuleName, DoNotUseSHA1Message));
+            GetCSharpResultAt(8, 31, CA5351RuleName, _doNotUseSHA1Message));
 
             VerifyBasic(@"
 Imports System.Security.Cryptography
@@ -415,7 +410,7 @@ Namespace TestNamespace
 		Private d As Del = Sub() SHA1.Create()
 	End Class
 End Namespace",
-        GetBasicResultAt(6, 28, CA5351RuleName, DoNotUseSHA1Message));
+        GetBasicResultAt(6, 28, CA5351RuleName, _doNotUseSHA1Message));
         }
 
         [Fact]
@@ -461,7 +456,7 @@ namespace TestNamespace
         }
     }
 }" },
-            GetCSharpResultAt(10, 26, CA5351RuleName, DoNotUseSHA1Message));
+            GetCSharpResultAt(10, 26, CA5351RuleName, _doNotUseSHA1Message));
 
             VerifyBasic(new[] {
 //Test0
@@ -494,7 +489,7 @@ Namespace TestNamespace
 		End Function
 	End Class
 End Namespace" },
-            GetBasicResultAt(6, 17, CA5351RuleName, DoNotUseSHA1Message));
+            GetBasicResultAt(6, 17, CA5351RuleName, _doNotUseSHA1Message));
         }
 
         [Fact]
@@ -513,7 +508,7 @@ namespace TestNamespace
         }
     }
 }",
-            GetCSharpResultAt(10, 24, CA5351RuleName, DoNotUseSHA1Message));
+            GetCSharpResultAt(10, 24, CA5351RuleName, _doNotUseSHA1Message));
 
             VerifyBasic(@"
 Imports System.Security.Cryptography
@@ -523,7 +518,7 @@ Module TestClass
         Dim SHA1alg As New SHA1CryptoServiceProvider
     End Sub
 End Module",
-            GetBasicResultAt(6, 24, CA5351RuleName, DoNotUseSHA1Message));
+            GetBasicResultAt(6, 24, CA5351RuleName, _doNotUseSHA1Message));
         }
 
         [Fact]
@@ -542,7 +537,7 @@ namespace TestNamespace
         }
     }
 }",
-            GetCSharpResultAt(10, 28, CA5351RuleName, DoNotUseSHA1Message));
+            GetCSharpResultAt(10, 28, CA5351RuleName, _doNotUseSHA1Message));
 
             VerifyBasic(@"
 Imports System.Security.Cryptography
@@ -552,9 +547,9 @@ Module TestClass
         Dim hmacsha1 As HMACSHA1 = New HMACSHA1()
     End Sub
 End Module",
-            GetBasicResultAt(6, 36, CA5351RuleName, DoNotUseSHA1Message));
+            GetBasicResultAt(6, 36, CA5351RuleName, _doNotUseSHA1Message));
         }
-//No VB
+        //No VB
         [Fact]
         public void CA5354CreateHMACSHA1ObjectInPropertyDeclaration()
         {
@@ -567,7 +562,7 @@ namespace TestNamespace
         public HMAC GetHMACSHA1 => new HMACSHA1;
     }
 }",
-            GetCSharpResultAt(7, 36, CA5351RuleName, DoNotUseSHA1Message));
+            GetCSharpResultAt(7, 36, CA5351RuleName, _doNotUseSHA1Message));
         }
 
         [Fact]
@@ -585,7 +580,7 @@ namespace TestNamespace
         }
     }
 }",
-            GetCSharpResultAt(9, 26, CA5351RuleName, DoNotUseSHA1Message));
+            GetCSharpResultAt(9, 26, CA5351RuleName, _doNotUseSHA1Message));
 
             VerifyBasic(@"
 Imports System.Security.Cryptography
@@ -598,7 +593,7 @@ Namespace TestNamespace
 		End Property
 	End Class
 End Namespace",
-            GetBasicResultAt(7, 12, CA5351RuleName, DoNotUseSHA1Message));
+            GetBasicResultAt(7, 12, CA5351RuleName, _doNotUseSHA1Message));
         }
 
         [Fact]
@@ -613,7 +608,7 @@ namespace TestNamespace
         public HMAC Alg = new HMACSHA1();  
     }
 }",
-            GetCSharpResultAt(7, 27, CA5351RuleName, DoNotUseSHA1Message));
+            GetCSharpResultAt(7, 27, CA5351RuleName, _doNotUseSHA1Message));
 
             VerifyBasic(@"
 Imports System.Security.Cryptography
@@ -622,9 +617,9 @@ Namespace TestNamespace
 		Public Alg As HMAC = New HMACSHA1()
 	End Class
 End Namespace",
-            GetBasicResultAt(5, 24, CA5351RuleName, DoNotUseSHA1Message));
+            GetBasicResultAt(5, 24, CA5351RuleName, _doNotUseSHA1Message));
         }
-//No VB
+        //No VB
         [Fact]
         public void CA5354CreateHMACSHA1ObjectInLambdaExpression()
         {
@@ -641,10 +636,9 @@ namespace TestNamespace
         }
     }
 }",
-            GetCSharpResultAt(10, 36, CA5351RuleName, DoNotUseSHA1Message));
-            
+            GetCSharpResultAt(10, 36, CA5351RuleName, _doNotUseSHA1Message));
         }
-//No VB
+        //No VB
         [Fact]
         public void CA5354CreateHMACSHA1ObjectInAnonymousMethodExpression()
         {
@@ -658,7 +652,7 @@ namespace TestNamespace
         Del d = delegate () { new HMACSHA1(); };
     }
 }",
-            GetCSharpResultAt(8, 31, CA5351RuleName, DoNotUseSHA1Message));
+            GetCSharpResultAt(8, 31, CA5351RuleName, _doNotUseSHA1Message));
         }
 
         [Fact]
@@ -704,7 +698,7 @@ namespace TestNamespace
         }
     }
 }" },
-            GetCSharpResultAt(10, 30, CA5351RuleName, DoNotUseSHA1Message));
+            GetCSharpResultAt(10, 30, CA5351RuleName, _doNotUseSHA1Message));
 
             VerifyBasic(new[] {
 //Test0
@@ -739,7 +733,7 @@ Namespace TestNamespace
 	End Class
 End Namespace
 " },
-            GetBasicResultAt(7, 21, CA5351RuleName, DoNotUseSHA1Message));
+            GetBasicResultAt(7, 21, CA5351RuleName, _doNotUseSHA1Message));
         }
         #endregion 
 
@@ -756,7 +750,7 @@ End Namespace
         private const string CA5350RuleName = DoNotUseInsecureCryptographicAlgorithmsAnalyzer.DoNotUseBrokenCryptographicRuleId;
         private const string CA5351RuleName = DoNotUseInsecureCryptographicAlgorithmsAnalyzer.DoNotUseWeakCryptographicRuleId;
 
-        private readonly string DoNotUseMD5Message = SystemSecurityCryptographyHashingAlgorithmsAnalyzersResources.DoNotUseMD5;
-        private readonly string DoNotUseSHA1Message = SystemSecurityCryptographyHashingAlgorithmsAnalyzersResources.DoNotUseSHA1; 
+        private readonly string _doNotUseMD5Message = SystemSecurityCryptographyHashingAlgorithmsAnalyzersResources.DoNotUseMD5;
+        private readonly string _doNotUseSHA1Message = SystemSecurityCryptographyHashingAlgorithmsAnalyzersResources.DoNotUseSHA1;
     }
 }

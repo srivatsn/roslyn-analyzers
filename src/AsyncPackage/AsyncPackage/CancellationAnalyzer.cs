@@ -1,13 +1,7 @@
-﻿// Copyright (c) Microsoft.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using System;
-using System.Collections.Immutable;
 using System.Linq;
-using System.Threading;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace AsyncPackage
 {
@@ -19,7 +13,7 @@ namespace AsyncPackage
     {
         internal const string CancellationId = "Async005";
 
-        internal static DiagnosticDescriptor Rule = new DiagnosticDescriptor(id: CancellationId,
+        internal static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(id: CancellationId,
             title: "Propagate CancellationTokens When Possible",
             messageFormat: "This method can take a CancellationToken",
             category: "Library",
@@ -40,8 +34,7 @@ namespace AsyncPackage
             if (methodDeclaration != null)
             {
                 ITypeSymbol cancellationTokenType = context.SemanticModel.Compilation.GetTypeByMetadataName("System.Threading.CancellationToken");
-
-                var paramTypes = methodDeclaration.Parameters.Select(x => x.Type);
+                object paramTypes = methodDeclaration.Parameters.Select(x => x.Type);
 
                 if (paramTypes.Contains(cancellationTokenType))
                 {
@@ -60,16 +53,15 @@ namespace AsyncPackage
                 if (invokeMethod != null)
                 {
                     ITypeSymbol cancellationTokenType = context.SemanticModel.Compilation.GetTypeByMetadataName("System.Threading.CancellationToken");
-
-                    var invokeParams = invokeMethod.Parameters.Select(x => x.Type);
+                    object invokeParams = invokeMethod.Parameters.Select(x => x.Type);
 
                     if (invokeParams.Contains(cancellationTokenType))
                     {
                         var passedToken = false;
 
-                        foreach (var arg in ((InvocationExpressionSyntax)context.Node).ArgumentList.Arguments)
+                        foreach (object arg in ((InvocationExpressionSyntax)context.Node).ArgumentList.Arguments)
                         {
-                            var thisArgType = context.SemanticModel.GetTypeInfo(arg.Expression).Type;
+                            object thisArgType = context.SemanticModel.GetTypeInfo(arg.Expression).Type;
 
                             if (thisArgType != null && thisArgType.Equals(cancellationTokenType))
                             {

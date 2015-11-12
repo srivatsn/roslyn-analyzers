@@ -1,4 +1,7 @@
-﻿using Microsoft.CodeAnalysis;
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using Microsoft.CodeAnalysis;
 using System;
 
 namespace TestHelper
@@ -34,22 +37,22 @@ namespace TestHelper
     /// </summary>
     public struct DiagnosticResult
     {
-        private DiagnosticResultLocation[] locations;
+        private DiagnosticResultLocation[] _locations;
 
         public DiagnosticResultLocation[] Locations
         {
             get
             {
-                if (this.locations == null)
+                if (_locations == null)
                 {
-                    this.locations = new DiagnosticResultLocation[] { };
+                    _locations = new DiagnosticResultLocation[] { };
                 }
-                return this.locations;
+                return _locations;
             }
 
             set
             {
-                this.locations = value;
+                _locations = value;
             }
         }
 

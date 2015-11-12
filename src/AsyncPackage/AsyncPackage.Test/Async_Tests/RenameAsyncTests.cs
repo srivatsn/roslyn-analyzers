@@ -1,4 +1,5 @@
-﻿// Copyright (c) Microsoft.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -30,7 +31,7 @@ namespace ConsoleApplication1
     }
 }";
 
-        private DiagnosticResult expected002 = new DiagnosticResult
+        private DiagnosticResult _expected002 = new DiagnosticResult
         {
             Id = "Async002",
             Message = "This method is async but the method name does not end in Async",
@@ -114,9 +115,9 @@ namespace ConsoleApplication1
 
             var test = DefaultHeader + body + DefaultFooter;
 
-            expected002.Locations = new[] { new DiagnosticResultLocation("Test0.cs", 13, 33) };
+            _expected002.Locations = new[] { new DiagnosticResultLocation("Test0.cs", 13, 33) };
 
-            VerifyCSharpDiagnostic(test, expected002);
+            VerifyCSharpDiagnostic(test, _expected002);
 
             var fixbody = @"
         private async Task<int> MathAsync(int num1) 
@@ -207,9 +208,9 @@ namespace ConsoleApplication1
 
             var test = DefaultHeader + body + DefaultFooter;
 
-            expected002.Locations = new[] { new DiagnosticResultLocation("Test0.cs", 13, 33) };
+            _expected002.Locations = new[] { new DiagnosticResultLocation("Test0.cs", 13, 33) };
 
-            VerifyCSharpDiagnostic(test, expected002);
+            VerifyCSharpDiagnostic(test, _expected002);
 
             var fixbody = @"
         private async Task<int> DoSomeMath(int number1, int number2) 
@@ -249,9 +250,9 @@ namespace ConsoleApplication1
 
             var test = DefaultHeader + body + DefaultFooter;
 
-            expected002.Locations = new[] { new DiagnosticResultLocation("Test0.cs", 18, 33) };
+            _expected002.Locations = new[] { new DiagnosticResultLocation("Test0.cs", 18, 33) };
 
-            VerifyCSharpDiagnostic(test, expected002);
+            VerifyCSharpDiagnostic(test, _expected002);
 
             var fixbody = @"
         private int Math(int num1, int num2) 
@@ -290,9 +291,9 @@ namespace ConsoleApplication1
         }";
             var test = DefaultHeader + body + DefaultFooter;
 
-            expected002.Locations = new[] { new DiagnosticResultLocation("Test0.cs", 20, 36) };
+            _expected002.Locations = new[] { new DiagnosticResultLocation("Test0.cs", 20, 36) };
 
-            VerifyCSharpDiagnostic(test, expected002);
+            VerifyCSharpDiagnostic(test, _expected002);
 
             var fixbody = @"
         public async void AsyncVoidReturnTaskT()
@@ -327,9 +328,9 @@ namespace ConsoleApplication1
 
             var test = DefaultHeader + body + DefaultFooter;
 
-            expected002.Locations = new[] { new DiagnosticResultLocation("Test0.cs", 13, 33) };
+            _expected002.Locations = new[] { new DiagnosticResultLocation("Test0.cs", 13, 33) };
 
-            VerifyCSharpDiagnostic(test, expected002);
+            VerifyCSharpDiagnostic(test, _expected002);
 
             var fixbody = @"
         private async Task<int> DoSomeMathAsync(int number1, int number2) 
@@ -358,9 +359,9 @@ namespace ConsoleApplication1
 
             var test = DefaultHeader + body + DefaultFooter;
 
-            expected002.Locations = new[] { new DiagnosticResultLocation("Test0.cs", 13, 36) };
+            _expected002.Locations = new[] { new DiagnosticResultLocation("Test0.cs", 13, 36) };
 
-            VerifyCSharpDiagnostic(test, expected002);
+            VerifyCSharpDiagnostic(test, _expected002);
 
             var fixbody = @"
         public static Task<String> ReturnAAAAsync()
@@ -392,9 +393,9 @@ namespace ConsoleApplication1
 
             var test = DefaultHeader + body + DefaultFooter;
 
-            expected002.Locations = new[] { new DiagnosticResultLocation("Test0.cs", 13, 39) };
+            _expected002.Locations = new[] { new DiagnosticResultLocation("Test0.cs", 13, 39) };
 
-            VerifyCSharpDiagnostic(test, expected002);
+            VerifyCSharpDiagnostic(test, _expected002);
 
             var fixbody = @"
         public static async Task<int> MultiplyAsync(int factor1, int factor2)
@@ -425,9 +426,9 @@ namespace ConsoleApplication1
 
             var test = DefaultHeader + body + DefaultFooter;
 
-            expected002.Locations = new[] { new DiagnosticResultLocation("Test0.cs", 13, 34) };
+            _expected002.Locations = new[] { new DiagnosticResultLocation("Test0.cs", 13, 34) };
 
-            VerifyCSharpDiagnostic(test, expected002);
+            VerifyCSharpDiagnostic(test, _expected002);
 
             var fixbody = @"
         private async Task<bool> Async(bool trueorfalse) 
@@ -455,9 +456,9 @@ namespace ConsoleApplication1
 
             var test = DefaultHeader + body + DefaultFooter;
 
-            expected002.Locations = new[] { new DiagnosticResultLocation("Test0.cs", 13, 33) };
+            _expected002.Locations = new[] { new DiagnosticResultLocation("Test0.cs", 13, 33) };
 
-            VerifyCSharpDiagnostic(test, expected002);
+            VerifyCSharpDiagnostic(test, _expected002);
 
             var fixbody = @"
         private async Task<int> MathAzyncAsync(int num1) 
@@ -485,9 +486,9 @@ namespace ConsoleApplication1
 
             var test = DefaultHeader + body + DefaultFooter;
 
-            expected002.Locations = new[] { new DiagnosticResultLocation("Test0.cs", 13, 33) };
+            _expected002.Locations = new[] { new DiagnosticResultLocation("Test0.cs", 13, 33) };
 
-            VerifyCSharpDiagnostic(test, expected002);
+            VerifyCSharpDiagnostic(test, _expected002);
 
             var fixbody = @"
         private async Task<int> MathAsytncAsync(int num1) 

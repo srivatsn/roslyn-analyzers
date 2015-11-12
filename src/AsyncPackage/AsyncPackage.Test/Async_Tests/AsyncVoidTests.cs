@@ -1,4 +1,5 @@
-﻿// Copyright (c) Microsoft.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -30,7 +31,7 @@ namespace ConsoleApplication1
     }
 }";
 
-        private DiagnosticResult expected001 = new DiagnosticResult
+        private DiagnosticResult _expected001 = new DiagnosticResult
         {
             Id = "Async001",
             Message = "This method has the async keyword but it returns void",
@@ -340,9 +341,9 @@ namespace ConsoleApplication1
 
             var test = DefaultHeader + body + DefaultFooter;
 
-            expected001.Locations = new[] { new DiagnosticResultLocation("Test0.cs", 13, 27) };
+            _expected001.Locations = new[] { new DiagnosticResultLocation("Test0.cs", 13, 27) };
 
-            VerifyCSharpDiagnostic(test, expected001);
+            VerifyCSharpDiagnostic(test, _expected001);
 
             var fixbody = @"         
         public async Task SomeAsyncTask()
@@ -447,9 +448,9 @@ namespace ConsoleApplication1
 
             var test = DefaultHeader + body + DefaultFooter;
 
-            expected001.Locations = new[] { new DiagnosticResultLocation("Test0.cs", 13, 27) };
+            _expected001.Locations = new[] { new DiagnosticResultLocation("Test0.cs", 13, 27) };
 
-            VerifyCSharpDiagnostic(test, expected001);
+            VerifyCSharpDiagnostic(test, _expected001);
 
             var fixbody = @"
         public async Task AsyncVoidReturnTaskT()
@@ -486,9 +487,9 @@ namespace ConsoleApplication1
 
             var test = DefaultHeader + body + DefaultFooter;
 
-            expected001.Locations = new[] { new DiagnosticResultLocation("Test0.cs", 13, 28) };
+            _expected001.Locations = new[] { new DiagnosticResultLocation("Test0.cs", 13, 28) };
 
-            VerifyCSharpDiagnostic(test, expected001);
+            VerifyCSharpDiagnostic(test, _expected001);
 
             var fixbody = @"
         private async Task WaitForIt(int value)
@@ -516,9 +517,9 @@ namespace ConsoleApplication1
 
             var test = DefaultHeader + body + DefaultFooter;
 
-            expected001.Locations = new[] { new DiagnosticResultLocation("Test0.cs", 13, 28) };
+            _expected001.Locations = new[] { new DiagnosticResultLocation("Test0.cs", 13, 28) };
 
-            VerifyCSharpDiagnostic(test, expected001);
+            VerifyCSharpDiagnostic(test, _expected001);
 
             var fixbody = @"
         private async Task WaitForIt(int value, int value2)

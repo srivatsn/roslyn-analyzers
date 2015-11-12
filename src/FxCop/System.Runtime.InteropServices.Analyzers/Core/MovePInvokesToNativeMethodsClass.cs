@@ -1,4 +1,5 @@
-﻿// Copyright (c) Microsoft.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
 using System.Collections.Immutable;
@@ -16,7 +17,7 @@ namespace System.Runtime.InteropServices.Analyzers
     public sealed class MovePInvokesToNativeMethodsClassAnalyzer : DiagnosticAnalyzer
     {
         internal const string RuleId = "CA1060";
-        private static LocalizableString s_localizableTitleAndMessage = new LocalizableResourceString(nameof(SystemRuntimeInteropServicesAnalyzersResources.MovePInvokesToNativeMethodsClass), SystemRuntimeInteropServicesAnalyzersResources.ResourceManager, typeof(SystemRuntimeInteropServicesAnalyzersResources));
+        private static readonly LocalizableString s_localizableTitleAndMessage = new LocalizableResourceString(nameof(SystemRuntimeInteropServicesAnalyzersResources.MovePInvokesToNativeMethodsClass), SystemRuntimeInteropServicesAnalyzersResources.ResourceManager, typeof(SystemRuntimeInteropServicesAnalyzersResources));
 
         internal static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(RuleId,
                                                                          s_localizableTitleAndMessage,

@@ -1,4 +1,5 @@
-﻿// Copyright (c) Microsoft.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -15,7 +16,7 @@ namespace System.Runtime.Analyzers.UnitTests
         {
             return new AvoidUnsealedAttributesAnalyzer();
         }
-                          
+
         protected override CodeFixProvider GetBasicCodeFixProvider()
         {
             return new AvoidUnsealedAttributesFixer();
@@ -25,7 +26,7 @@ namespace System.Runtime.Analyzers.UnitTests
         {
             return new AvoidUnsealedAttributesAnalyzer();
         }
-                          
+
         protected override CodeFixProvider GetCSharpCodeFixProvider()
         {
             return new AvoidUnsealedAttributesFixer();

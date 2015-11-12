@@ -1,4 +1,5 @@
-﻿// Copyright (c) Microsoft.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
 using System.Linq;
@@ -41,9 +42,9 @@ namespace Microsoft.CodeAnalysis.CSharp.Analyzers
         private static readonly string s_With = "With";
 
         private static readonly ImmutableArray<string> s_immutableMethodNames = ImmutableArray.Create(
-            s_Add, 
-            s_Remove, 
-            s_Replace, 
+            s_Add,
+            s_Remove,
+            s_Replace,
             s_With);
 
         public override void Initialize(AnalysisContext context)
@@ -93,11 +94,11 @@ namespace Microsoft.CodeAnalysis.CSharp.Analyzers
 
             //If we're not in one of the known immutable types, quit
             var parentType = methodSymbol.ReceiverType as INamedTypeSymbol;
-            if(parentType == null)
+            if (parentType == null)
             {
                 return;
             }
-            
+
             var baseTypesAndSelf = methodSymbol.ReceiverType.GetBaseTypes().ToList();
             baseTypesAndSelf.Add(parentType);
 
