@@ -1,0 +1,156 @@
+﻿@model MainViewModel
+@{
+    ViewBag.Title = "Home Page";
+}
+
+@functions
+{
+    class AnalyzerPackageComparer : IComparer<string>
+    {
+        public static AnalyzerPackageComparer Instance = new AnalyzerPackageComparer();
+
+        public int Compare(string package1, string package2)
+        {
+            if (package1.StartsWith("System") && !package2.StartsWith("System"))
+                return -1;
+
+            if (package2.StartsWith("System") && !package1.StartsWith("System"))
+                return 1;
+
+            if (package1.StartsWith("Microsoft") && !package2.StartsWith("Microsoft"))
+                return -1;
+
+            if (package2.StartsWith("Microsoft") && !package1.StartsWith("Microsoft"))
+                return 1;
+
+            return package1.CompareTo(package2);
+        }
+    }
+}
+
+@helper GetDiagnosticColorClass(AnalyzersStatusInfo diagnostic)
+{
+    if (diagnostic.HasCSharpImplementation && diagnostic.HasVBImplementation && diagnostic.IsEnabledByDefault != "DisabledNoTests")
+    {
+            <text>success</text>
+    }
+    else if (diagnostic.HasCSharpImplementation || diagnostic.HasVBImplementation)
+    {
+            <text>warning</text>
+    }
+    else
+    {
+            <text>danger</text>
+    }
+}
+@helper True()
+{
+    <i class="fa fa-check" style="color: green;"></i>
+}
+@helper False()
+{
+    <i class="fa fa-times" style="color: red;"></i>
+}
+@helper Undecided()
+{
+    <i class="fa fa-exclamation"></i>
+}
+
+<h2>This page is reporting the current status of <a href="https://github.com/dotnet/roslyn-analyzers">Roslyn Analyzers</a></h2>
+
+<div class="table-responsive">
+    @foreach (var diagnosticGroup in Model.Diagnostics.GroupBy(d => d.AnalyzerPackage).OrderBy(o => o.Key, AnalyzerPackageComparer.Instance))
+    {
+        <h2>@diagnosticGroup.Key</h2>
+
+        <table id="no-more-tables" class="table table-hover table-condensed">
+            <thead>
+                <tr>
+                    <td>
+                        Category
+                    </td>
+                    <td>
+                        ID
+                    </td>
+                    <td>
+                        Title
+                    </td>
+                    <td>
+                        C#
+                    </td>
+                    <td>
+                        VB
+                    </td>
+                    <td>
+                        Status
+                    </td>
+                    <td style="overflow: visible; width: 0;">
+                        Code Fix
+                    </td>
+                    <td></td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in diagnosticGroup)
+                {
+                    <tr class="@GetDiagnosticColorClass(item)">
+                        <td title="@item.Category" data-title="Category">@Html.ActionLink(item.Category, "Index", new { category = item.Category })</td>
+                        <td><a href="@item.HelpLink" data-title="ID">@item.Id</a></td>
+                        <td data-title="Title">@item.Title</td>
+                        <td data-title="Has C# Implementation">
+                            <a href="@Url.Action("Index", new { hasCSharpImplementation = item.HasCSharpImplementation })">
+                                @if (item.HasCSharpImplementation)
+                                {
+                                    @True()
+                                }
+                                else
+                                {
+                                    @False()
+                                }
+                            </a>
+                        </td>
+                        <td data-title="Has VB Implementation">
+                            <a href="@Url.Action("Index", new { hasVBImplementation = item.HasVBImplementation })">
+                                @if (item.HasVBImplementation)
+                                {
+                                    @True()
+                                }
+                                else
+                                {
+                                    @False()
+                                }
+                            </a>
+                        </td>
+                        <td data-title="Has Title">
+                            <a href="@Url.Action("Index", new { status = item.IsEnabledByDefault })">
+                                @item.IsEnabledByDefault
+                            </a>
+                        </td>
+                        @switch (item.HasCodeFix)
+                        {
+                        case true:
+                            <td data-title="Code Fix">
+                                <a href="@Url.Action("Index", new { codeFixStatus = item.HasCodeFix })">@True()</a>
+                            </td>
+                            break;
+                        @*case CodeFixStatus.NotImplemented:
+                            <td title="@item.NoCodeFixReason" data-title="Code Fix">
+                                <a href="@Url.Action("Index", new { codeFixStatus = item.HasCodeFix })">@Undecided()</a>
+                                <span class="visible-xs-inline" style="padding-left: 5px;">@item.NoCodeFixReason</span>
+                            </td>
+                            break;*@
+                        case false:
+                            <td data-title="Code Fix">
+                                <a href="@Url.Action("Index", new { codeFixStatus = item.HasCodeFix })">@False()</a>
+                            </td>
+                            break;
+                        default:
+                            break;
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <br />
+    }
+</div>
