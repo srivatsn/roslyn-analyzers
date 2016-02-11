@@ -12,6 +12,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Linq;
 using Microsoft.CodeAnalysis.Editing;
 using Analyzer.Utilities;
+using Microsoft.CodeAnalysis.Text;
 
 namespace Microsoft.ApiDesignGuidelines.Analyzers
 {
@@ -26,16 +27,16 @@ namespace Microsoft.ApiDesignGuidelines.Analyzers
 
         public sealed override async Task RegisterCodeFixesAsync(CodeFixContext context)
         {
-            var document = context.Document;
-            var span = context.Span;
-            var cancellationToken = context.CancellationToken;
+            Document document = context.Document;
+            TextSpan span = context.Span;
+            CancellationToken cancellationToken = context.CancellationToken;
 
             cancellationToken.ThrowIfCancellationRequested();
-            var root = await document.GetSyntaxRootAsync(cancellationToken).ConfigureAwait(false);
-            var classDeclaration = root.FindToken(span.Start).Parent?.FirstAncestorOrSelf<ClassDeclarationSyntax>();
+            SyntaxNode root = await document.GetSyntaxRootAsync(cancellationToken).ConfigureAwait(false);
+            ClassDeclarationSyntax classDeclaration = root.FindToken(span.Start).Parent?.FirstAncestorOrSelf<ClassDeclarationSyntax>();
             if (classDeclaration != null)
             {
-                var codeAction = new MyCodeAction(MicrosoftApiDesignGuidelinesAnalyzersResources.MakeClassStatic, 
+                var codeAction = new MyCodeAction(MicrosoftApiDesignGuidelinesAnalyzersResources.MakeClassStatic,
                                                   async ct => await MakeClassStatic(document, root, classDeclaration, ct).ConfigureAwait(false));
                 context.RegisterCodeFix(codeAction, context.Diagnostics);
             }
@@ -43,8 +44,8 @@ namespace Microsoft.ApiDesignGuidelines.Analyzers
 
         private async Task<Document> MakeClassStatic(Document document, SyntaxNode root, ClassDeclarationSyntax classDeclaration, CancellationToken ct)
         {
-            var editor = await DocumentEditor.CreateAsync(document, ct).ConfigureAwait(false);
-            var modifiers = editor.Generator.GetModifiers(classDeclaration);
+            DocumentEditor editor = await DocumentEditor.CreateAsync(document, ct).ConfigureAwait(false);
+            DeclarationModifiers modifiers = editor.Generator.GetModifiers(classDeclaration);
             editor.SetModifiers(classDeclaration, modifiers - DeclarationModifiers.Sealed + DeclarationModifiers.Static);
 
             SyntaxList<MemberDeclarationSyntax> members = classDeclaration.Members;
