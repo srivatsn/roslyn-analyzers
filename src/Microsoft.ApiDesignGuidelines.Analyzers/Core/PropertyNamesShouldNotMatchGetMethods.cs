@@ -1,5 +1,6 @@
 // Copyright (c) Microsoft.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
 
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -39,7 +40,6 @@ namespace Microsoft.ApiDesignGuidelines.Analyzers
             analysisContext.RegisterSymbolAction(symbolContext =>
             {
                 AnalyzeSymbol(symbolContext.Symbol, symbolContext);
-
             }, SymbolKind.Property, SymbolKind.Method);
         }
 
@@ -67,17 +67,17 @@ namespace Microsoft.ApiDesignGuidelines.Analyzers
             var matchFound = false;
 
             //get the collection of declaring and base types
-            var types = symbol.ContainingType.GetBaseTypesAndThis();
+            IEnumerable<INamedTypeSymbol> types = symbol.ContainingType.GetBaseTypesAndThis();
 
 
             //iterate thru collection to find match
-            foreach (var type in types)
+            foreach (INamedTypeSymbol type in types)
             {
-                var membersFound = type.GetMembers(identifier);
+                ImmutableArray<ISymbol> membersFound = type.GetMembers(identifier);
                 if (membersFound != null && membersFound.Length > 0)
                 {
                     //found a match
-                    foreach (var member in membersFound)
+                    foreach (ISymbol member in membersFound)
                     {
                         //valid matches are...
                         //when property from declaring type matches with method present in declaring type - this is covered by the LHS of OR condition below

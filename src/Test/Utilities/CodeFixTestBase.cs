@@ -1,8 +1,10 @@
 ﻿// Copyright (c) Microsoft.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
 
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Threading;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -32,7 +34,7 @@ namespace Microsoft.CodeAnalysis.UnitTests
 
         protected void VerifyFix(string language, DiagnosticAnalyzer analyzer, CodeFixProvider codeFixProvider, string oldSource, string newSource, int? codeFixIndex, bool allowNewCompilerDiagnostics)
         {
-            var document = CreateDocument(oldSource, language);
+            Document document = CreateDocument(oldSource, language);
 
             VerifyFix(document, analyzer, codeFixProvider, newSource, codeFixIndex, useCompilerAnalyzerDriver: true, allowNewCompilerDiagnostics: allowNewCompilerDiagnostics);
             VerifyFix(document, analyzer, codeFixProvider, newSource, codeFixIndex, useCompilerAnalyzerDriver: false, allowNewCompilerDiagnostics: allowNewCompilerDiagnostics);
@@ -40,8 +42,8 @@ namespace Microsoft.CodeAnalysis.UnitTests
 
         private void VerifyFix(Document document, DiagnosticAnalyzer analyzer, CodeFixProvider codeFixProvider, string newSource, int? codeFixIndex, bool useCompilerAnalyzerDriver, bool allowNewCompilerDiagnostics)
         {
-            var analyzerDiagnostics = GetSortedDiagnostics(analyzer, document, useCompilerAnalyzerDriver: useCompilerAnalyzerDriver);
-            var compilerDiagnostics = document.GetSemanticModelAsync().Result.GetDiagnostics();
+            Diagnostic[] analyzerDiagnostics = GetSortedDiagnostics(analyzer, document, useCompilerAnalyzerDriver: useCompilerAnalyzerDriver);
+            ImmutableArray<Diagnostic> compilerDiagnostics = document.GetSemanticModelAsync().Result.GetDiagnostics();
 
             // TODO(mavasani): Delete the below if statement once FxCop Analyzers have been ported to new IDiagnosticAnalyzer API.
             if (!useCompilerAnalyzerDriver)
@@ -50,7 +52,7 @@ namespace Microsoft.CodeAnalysis.UnitTests
                 return;
             }
 
-            var attempts = analyzerDiagnostics.Length;
+            int attempts = analyzerDiagnostics.Length;
 
             for (int i = 0; i < attempts; ++i)
             {
@@ -71,7 +73,7 @@ namespace Microsoft.CodeAnalysis.UnitTests
                 document = document.Apply(actions.ElementAt(0));
 
                 analyzerDiagnostics = GetSortedDiagnostics(analyzer, document, useCompilerAnalyzerDriver: useCompilerAnalyzerDriver);
-                var newCompilerDiagnostics = GetNewDiagnostics(compilerDiagnostics, document.GetSemanticModelAsync().Result.GetDiagnostics());
+                IEnumerable<Diagnostic> newCompilerDiagnostics = GetNewDiagnostics(compilerDiagnostics, document.GetSemanticModelAsync().Result.GetDiagnostics());
                 if (!allowNewCompilerDiagnostics && newCompilerDiagnostics.Any())
                 {
                     // Format and get the compiler diagnostics again so that the locations make sense in the output
@@ -90,17 +92,17 @@ namespace Microsoft.CodeAnalysis.UnitTests
                 }
             }
 
-            var newDocument = Simplifier.ReduceAsync(document, Simplifier.Annotation).Result;
-            var root = newDocument.GetSyntaxRootAsync().Result;
+            Document newDocument = Simplifier.ReduceAsync(document, Simplifier.Annotation).Result;
+            SyntaxNode root = newDocument.GetSyntaxRootAsync().Result;
             root = Formatter.Format(root, Formatter.Annotation, newDocument.Project.Solution.Workspace);
-            var actual = root.GetText().ToString();
+            string actual = root.GetText().ToString();
             Assert.Equal(newSource, actual);
         }
 
         private static IEnumerable<Diagnostic> GetNewDiagnostics(IEnumerable<Diagnostic> diagnostics, IEnumerable<Diagnostic> newDiagnostics)
         {
-            var oldArray = diagnostics.OrderBy(d => d.Location.SourceSpan.Start).ToArray();
-            var newArray = newDiagnostics.OrderBy(d => d.Location.SourceSpan.Start).ToArray();
+            Diagnostic[] oldArray = diagnostics.OrderBy(d => d.Location.SourceSpan.Start).ToArray();
+            Diagnostic[] newArray = newDiagnostics.OrderBy(d => d.Location.SourceSpan.Start).ToArray();
 
             int oldIndex = 0;
             int newIndex = 0;
@@ -123,7 +125,7 @@ namespace Microsoft.CodeAnalysis.UnitTests
         {
             TextSpan spanToTest = span.HasValue ? span.Value : document.GetSyntaxRootAsync().Result.FullSpan;
 
-            var diagnostics = useCompilerAnalyzerDriver ?
+            IEnumerable<Diagnostic> diagnostics = useCompilerAnalyzerDriver ?
                 GetDiagnosticsUsingCompilerAnalyzerDriver(analyzerFactory, document, span) :
                 GetDiagnosticsUsingIDEAnalyzerDriver(analyzerFactory, document, span);
 
@@ -143,8 +145,8 @@ namespace Microsoft.CodeAnalysis.UnitTests
 
         private static IEnumerable<Diagnostic> GetDiagnosticsUsingCompilerAnalyzerDriver(DiagnosticAnalyzer analyzer, Document document, TextSpan? span)
         {
-            var semanticModel = document.GetSemanticModelAsync().Result;
-            var compilation = semanticModel.Compilation;
+            SemanticModel semanticModel = document.GetSemanticModelAsync().Result;
+            Compilation compilation = semanticModel.Compilation;
             var diagnostics = new List<Diagnostic>();
             AnalyzeDocumentCore(analyzer, document, diagnostics.Add, span);
             return diagnostics;
