@@ -1,5 +1,6 @@
 // Copyright (c) Microsoft.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
 
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Threading;
@@ -94,13 +95,13 @@ namespace System.Resources.Analyzers
                 return false;
             }
 
-            var generatedCode = WellKnownTypes.GeneratedCodeAttribute(model.Compilation);
+            INamedTypeSymbol generatedCode = WellKnownTypes.GeneratedCodeAttribute(model.Compilation);
             if (model.GetSymbolInfo(attribute, cancellationToken).Symbol?.ContainingType?.Equals(generatedCode) != true)
             {
                 return false;
             }
 
-            var constValue = model.GetConstantValue(argument);
+            Optional<object> constValue = model.GetConstantValue(argument);
             if (!constValue.HasValue)
             {
                 return false;
@@ -122,11 +123,11 @@ namespace System.Resources.Analyzers
 
         private static bool TryCheckNeutralResourcesLanguageAttribute(CompilationAnalysisContext context, out AttributeData attributeData)
         {
-            var attribute = WellKnownTypes.NeutralResourcesLanguageAttribute(context.Compilation);
-            var @string = WellKnownTypes.String(context.Compilation);
+            INamedTypeSymbol attribute = WellKnownTypes.NeutralResourcesLanguageAttribute(context.Compilation);
+            INamedTypeSymbol @string = WellKnownTypes.String(context.Compilation);
 
-            var attributes = context.Compilation.Assembly.GetAttributes().Where(d => d.AttributeClass?.Equals(attribute) == true);
-            foreach (var data in attributes)
+            IEnumerable<AttributeData> attributes = context.Compilation.Assembly.GetAttributes().Where(d => d.AttributeClass?.Equals(attribute) == true);
+            foreach (AttributeData data in attributes)
             {
                 if (data.ConstructorArguments.Any(c => c.Type?.Equals(@string) == true && !string.IsNullOrWhiteSpace((string)c.Value)))
                 {

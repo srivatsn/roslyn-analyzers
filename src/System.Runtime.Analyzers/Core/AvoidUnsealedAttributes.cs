@@ -2,8 +2,8 @@
 
 using System.Collections.Immutable;
 using System.Linq;
-using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.Diagnostics;
 using Analyzer.Utilities;
 
 namespace System.Runtime.Analyzers
@@ -35,7 +35,7 @@ namespace System.Runtime.Analyzers
         {
             analysisContext.RegisterCompilationStartAction(compilationContext =>
             {
-                var attributeType = WellKnownTypes.Attribute(compilationContext.Compilation);
+                INamedTypeSymbol attributeType = WellKnownTypes.Attribute(compilationContext.Compilation);
                 if (attributeType == null)
                 {
                     return;

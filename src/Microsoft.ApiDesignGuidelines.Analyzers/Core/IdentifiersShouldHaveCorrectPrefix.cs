@@ -2,8 +2,8 @@
 
 using System;
 using System.Collections.Immutable;
-using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.Diagnostics;
 using Analyzer.Utilities;
 
 namespace Microsoft.ApiDesignGuidelines.Analyzers
@@ -62,7 +62,7 @@ namespace Microsoft.ApiDesignGuidelines.Analyzers
 
         private static void AnalyzeNamedTypeSymbol(INamedTypeSymbol symbol, Action<Diagnostic> addDiagnostic)
         {
-            foreach (var parameter in symbol.TypeParameters)
+            foreach (ITypeParameterSymbol parameter in symbol.TypeParameters)
             {
                 if (!HasCorrectPrefix(parameter, 'T'))
                 {
@@ -80,7 +80,7 @@ namespace Microsoft.ApiDesignGuidelines.Analyzers
 
         private static void AnalyzeMethodSymbol(IMethodSymbol symbol, Action<Diagnostic> addDiagnostic)
         {
-            foreach (var parameter in symbol.TypeParameters)
+            foreach (ITypeParameterSymbol parameter in symbol.TypeParameters)
             {
                 if (!HasCorrectPrefix(parameter, 'T'))
                 {
