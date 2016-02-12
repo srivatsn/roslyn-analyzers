@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Microsoft.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
 
 using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Threading;
@@ -40,19 +41,19 @@ namespace Roslyn.Diagnostics.Analyzers
         {
             context.CancellationToken.ThrowIfCancellationRequested();
 
-            var codeActionSymbol = context.Compilation.GetTypeByMetadataName(CodeActionMetadataName);
+            INamedTypeSymbol codeActionSymbol = context.Compilation.GetTypeByMetadataName(CodeActionMetadataName);
             if (codeActionSymbol == null)
             {
                 return;
             }
 
-            var createSymbols = codeActionSymbol.GetMembers(CreateMethodName).Where(m => m is IMethodSymbol);
+            IEnumerable<ISymbol> createSymbols = codeActionSymbol.GetMembers(CreateMethodName).Where(m => m is IMethodSymbol);
             if (createSymbols == null)
             {
                 return;
             }
 
-            var createSymbolsSet = ImmutableHashSet.CreateRange(createSymbols);
+            ImmutableHashSet<ISymbol> createSymbolsSet = ImmutableHashSet.CreateRange(createSymbols);
             context.RegisterCodeBlockStartAction<TLanguageKindEnum>(GetCodeBlockStartedAnalyzer(createSymbolsSet).CreateAnalyzerWithinCodeBlock);
         }
 
@@ -86,7 +87,7 @@ namespace Roslyn.Diagnostics.Analyzers
 
             private bool IsCodeActionCreate(SyntaxNode expression, SemanticModel semanticModel, CancellationToken cancellationToken)
             {
-                var symbolInfo = semanticModel.GetSymbolInfo(expression, cancellationToken);
+                SymbolInfo symbolInfo = semanticModel.GetSymbolInfo(expression, cancellationToken);
                 return symbolInfo.Symbol != null && _symbols.Contains(symbolInfo.Symbol);
             }
 
