@@ -2,6 +2,7 @@
 
 using System;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -15,7 +16,7 @@ namespace a2md
             Loader loader = new Loader();
             DescriptorEqualityComparer comparer = new DescriptorEqualityComparer();
 
-            var outputMarkdown = args
+            string outputMarkdown = args
                 .Select(arg => new AnalyzerFileReference(arg, loader))
                 .SelectMany(analyzerReference => analyzerReference.GetAnalyzersForAllLanguages())
                 .Where(HasImplementation)
@@ -34,11 +35,11 @@ namespace a2md
         /// </summary>
         private static bool HasImplementation(DiagnosticAnalyzer analyzer)
         {
-            var method = analyzer.GetType().GetMethod("Initialize");
+            MethodInfo method = analyzer.GetType().GetMethod("Initialize");
             if (method != null)
             {
-                var body = method.GetMethodBody();
-                var ilInstructionCount = body?.GetILAsByteArray()?.Count();
+                MethodBody body = method.GetMethodBody();
+                int? ilInstructionCount = body?.GetILAsByteArray()?.Count();
                 // An empty method has two IL instructions - nop and ret.
                 return ilInstructionCount != 2;
             }

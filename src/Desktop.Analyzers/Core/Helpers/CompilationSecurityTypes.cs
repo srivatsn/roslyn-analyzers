@@ -12,23 +12,23 @@ namespace Desktop.Analyzers
         public INamedTypeSymbol SystemSystemException { get; private set; }
         public INamedTypeSymbol DES { get; private set; }
         public INamedTypeSymbol DSA { get; private set; }
-        public INamedTypeSymbol DSASignatureFormatter { get; private set; } 
+        public INamedTypeSymbol DSASignatureFormatter { get; private set; }
         public INamedTypeSymbol HMACMD5 { get; private set; }
         public INamedTypeSymbol RC2 { get; private set; }
         public INamedTypeSymbol TripleDES { get; private set; }
         public INamedTypeSymbol RIPEMD160 { get; private set; }
-        public INamedTypeSymbol HMACRIPEMD160 { get; private set; } 
+        public INamedTypeSymbol HMACRIPEMD160 { get; private set; }
 
         public CompilationSecurityTypes(Compilation compilation)
         {
-            HandleProcessCorruptedStateExceptionsAttribute = 
+            HandleProcessCorruptedStateExceptionsAttribute =
                 SecurityTypes.HandleProcessCorruptedStateExceptionsAttribute(compilation);
             SystemObject = SecurityTypes.SystemObject(compilation);
             SystemException = SecurityTypes.SystemException(compilation);
             SystemSystemException = SecurityTypes.SystemSystemException(compilation);
             DES = SecurityTypes.DES(compilation);
             DSA = SecurityTypes.DSA(compilation);
-            DSASignatureFormatter = SecurityTypes.DSASignatureFormatter(compilation); 
+            DSASignatureFormatter = SecurityTypes.DSASignatureFormatter(compilation);
             HMACMD5 = SecurityTypes.HMACMD5(compilation);
             RC2 = SecurityTypes.RC2(compilation);
             TripleDES = SecurityTypes.TripleDES(compilation);
