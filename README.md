@@ -1,7 +1,11 @@
-.NET Compiler Platform ("Roslyn") Analyzers
+﻿.NET Compiler Platform ("Roslyn") Analyzers
 ===========================================
 
+New line
+second line
+
 This repository contains a number of [Roslyn](https://github.com/dotnet/roslyn) diagnostic analyzers initially developed to help flesh out the design and implementation of the static analysis APIs. They have been migrated from the main [dotnet/roslyn](https://github.com/dotnet/roslyn) repository in order to continue and speed their further development.
+tHJISRD LIUNE
 
 Debug | Release
 ------|--------
@@ -9,7 +13,7 @@ Debug | Release
 
 [![Join the chat at https://gitter.im/dotnet/roslyn](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/dotnet/roslyn?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-
+Fourth line
 Projects
 ========
 
