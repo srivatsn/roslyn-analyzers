@@ -2,6 +2,7 @@
 
 using System.Linq;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.Classification;
 
 namespace Analyzer.Utilities
 {
